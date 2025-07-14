@@ -1,0 +1,84 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}New Messages{% endblock %}
+{% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+  <div class="toolbar" id="kt_toolbar">
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+      <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+        class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">New Messages
+          <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+          <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="post d-flex flex-column-fluid" id="kt_post">
+    <div id="kt_content_container" class="container-xxl">
+      <div class="card">
+        <div class="card-header border-0 pt-6">
+          <div class="card-title">
+            <h2 style="color: rgb(125, 24, 32);">Pending User Messages</h2>
+          </div>
+        </div>
+
+        <div class="card-body pt-0">
+          <div class="table-responsive">
+            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_messages">
+              <thead>
+                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                  <th class="min-w-150px">Sender</th>
+                  <th class="min-w-200px">About</th>
+                  <th class="min-w-350px">Snippet</th>
+                  <th class="min-w-150px">Sent</th>
+                  <th class="min-w-125px">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-600 fw-bold">
+                {% for msg in messages %}
+                <tr>
+                  <td>{{ msg.sender.user_firstname }}</td>
+                  <td>{{ msg.property.title|default:"N/A" }}</td>
+                  <td>{{ msg.body|truncatechars:60 }}</td>
+                  <td>{{ msg.created_at|date:"d M Y, h:i A" }}</td>
+                  <td>
+                    <a href="{% url 'wadmin:messagereply' msg.sender.id msg.property.id %}"
+                       class="btn btn-sm btn-primary">Reply</a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center text-muted">No pending messages found.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Optional pagination like User List -->
+          {% if messages.has_other_pages %}
+          <div class="d-flex justify-content-center mt-5">
+            {% if messages.has_previous %}
+              <a href="?page=1" class="btn btn-light-primary btn-sm me-2">First</a>
+              <a href="?page={{ messages.previous_page_number }}" class="btn btn-light-primary btn-sm me-2">Previous</a>
+            {% endif %}
+
+            <span class="align-self-center mx-2 text-muted fw-bold">Page {{ messages.number }} of {{ messages.paginator.num_pages }}</span>
+
+            {% if messages.has_next %}
+              <a href="?page={{ messages.next_page_number }}" class="btn btn-light-primary btn-sm ms-2">Next</a>
+              <a href="?page={{ messages.paginator.num_pages }}" class="btn btn-light-primary btn-sm ms-2">Last</a>
+            {% endif %}
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

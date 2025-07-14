@@ -1,0 +1,646 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WarmNest Login/Signup</title>
+
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+    <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+    <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+
+    <style>
+        .property-img {
+            height: 400px;
+            object-fit: cover;
+        }
+
+        /* Insert all your previous login/signup styles here */
+        /* -- START: Your login/signup styles (already in your code) -- */
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+    
+        body,
+        html {
+            height: 100%;
+            background: hsl(0, 0%, 100%);
+        }
+
+        /* Main Container - Mobile First (Column Layout) */
+       .auth-container {
+        margin-top: 40px; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.site-nav {
+   position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: white;
+}
+
+        /* Left Section (Image) - Hidden by default for smartphones */
+        .left {
+            display: none;
+            /* Hides the image on smartphones */
+            width: 100%;
+            /* Will take full width when displayed on tablets */
+            padding: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            background: hsl(0, 0%, 100%);
+            min-height: auto;
+        }
+
+        .left img {
+            width: 40%;
+            max-width: 100px;
+            height: auto;
+             padding-top: 80px;
+            object-fit: contain;
+        }
+
+        /* Right Section (Form) - Always visible, takes full width on small screens */
+        .right {
+            width: 100%;
+            /* Takes full width on mobile and tablets */
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            min-height: auto;
+        }
+
+        .form-box {
+            width: 100%;
+            margin-top: 50px;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .form-box h2 {
+            margin-bottom: 0.625rem;
+            font-size: 1.5rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-box p {
+            font-size: 0.875rem;
+            margin-bottom: 1.25rem;
+            color: #555;
+            text-align: center;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            overflow: hidden;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .toggle-buttons button {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .toggle-buttons button.active {
+            background: linear-gradient(to right, #004e92, #000428);
+            color: white;
+            border-radius: 30px;
+        }
+
+        .toggle-buttons button:hover:not(.active) {
+            background-color: #d0d0d0;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 0.938rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #0e1f3e;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-btn:hover {
+            background-color: #172f57;
+            transform: translateY(-2px);
+        }
+
+        .form-btn:active {
+            transform: translateY(0);
+        }
+
+        .gender-group {
+            margin-bottom: 0.938rem;
+            font-size: 0.875rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gender-group input[type="radio"] {
+            margin-right: 0.4rem;
+        }
+
+        .feedback-row {
+            margin-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.813rem;
+            color: #555;
+            text-align: center;
+        }
+
+        .feedback-row a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #007acc;
+            transition: color 0.3s ease;
+        }
+
+        .feedback-row a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* --- Media Queries for Larger Devices (Mobile-First) --- */
+
+        /* Tablets and Up (Show image, keep column layout) */
+        @media (min-width: 768px) {
+            .left {
+                display: flex;
+                /* Show the image on tablets and up */
+            }
+
+            .left img {
+                max-width: 400px;
+                /* Slightly larger image for tablets */
+            }
+
+            .form-box {
+                max-width: 500px;
+                /* Slightly larger form box for tablets */
+                padding: 2.5rem;
+            }
+
+            .feedback-row {
+                flex-direction: row;
+                /* Side-by-side links on wider tablets */
+                justify-content: space-between;
+                gap: unset;
+            }
+        }
+
+        /* Larger Tablets (e.g., iPad Pro portrait) and Laptops (Switch to row layout, fix image) */
+        @media (min-width: 992px) {
+
+            /* CONTAINER */
+            .container {
+                flex-direction: row;
+                /* Switch to row layout for desktop/large tablets */
+                justify-content: space-between;
+                align-items: stretch;
+                padding: 0;
+                min-height: auto;
+                /* Allow body to definición scroll length */
+            }
+
+            /* LEFT SECTION (IMAGE) */
+            .left {
+                width: 50%;
+                /* Each takes half width */
+                min-height: 100vh;
+                /* Ensure it always takes full viewport height */
+                position: fixed;
+                /* Make it fixed to the viewport */
+                top: 0;
+                left: 0;
+                padding: 2rem;
+                background: hsl(0, 0%, 100%);
+                z-index: 10;
+            }
+
+            .left img {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            /* RIGHT SECTION (FORM) */
+            .right {
+                width: 50%;
+                min-height: 100vh;
+                /* Still takes full height to be scrollable */
+                padding: 2rem;
+                margin-left: 50%;
+                /* IMPORTANT: Offset to account for the fixed .left div */
+                position: relative;
+                z-index: 5;
+            }
+
+            .form-box {
+                max-width: 500px;
+                padding: 3rem;
+                border-radius: 30px;
+            }
+
+            .form-box h2 {
+                font-size: 1.5rem;
+                margin-bottom: 0.625rem;
+            }
+
+            .form-box p {
+                font-size: 0.875rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .toggle-buttons button {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Larger Desktops */
+        @media (min-width: 1024px) {
+            .left img {
+                max-width: 600px;
+            }
+
+            .form-box {
+                max-width: 550px;
+            }
+        }
+
+        /* Extra Large Desktops */
+        @media (min-width: 1200px) {
+            .left img {
+                max-width: 700px;
+            }
+
+            .form-box {
+                max-width: 600px;
+            }
+        }
+        input.error {
+        border-color: red;
+    }
+    label.error {
+        color: red;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+    .input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 25px !important; /* Ensures both sides are curved */
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Add the long styles you've included in your code here */
+        /* -- END: Your login/signup styles -- */
+    </style>
+</head>
+
+<body>
+     <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+    <!-- START: Navbar -->
+    <nav class="site-nav">
+        <div class="container">
+            <div class="menu-bg-wrap">
+                <div class="site-navigation">
+                    <a href="{% url 'wguest:homepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+  <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+                        <li class="active"><a href="{% url 'wguest:login' %}">Login</a></li>
+                    </ul>
+                    <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+                        <li class="active"><a href="{% url 'wguest:homepage' %}">Home</a></li>
+                    </ul>
+                    
+
+                    <a href="#" class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none" data-toggle="collapse" data-target="#main-navbar">
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END: Navbar -->
+
+    <!-- START: Login/Signup Container -->
+    <div class="auth-container">
+        <!-- LEFT IMAGE -->
+        <div class="left">
+            <img src="{% static 'images/loginimg.jpg' %}" alt="House Illustration">
+        </div>
+
+        <!-- RIGHT FORM BOX -->
+        <div class="right">
+            <div class="form-box">
+                <div class="toggle-buttons">
+                    <button id="loginToggle" class="active" onclick="showForm('login')">Login</button>
+                    <button id="signupToggle" onclick="showForm('signup')">Signup</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" method="post" action="{% url 'wguest:login' %}">
+                    {% csrf_token %}
+                    <h2>Enter Email & Password</h2>
+                    <p>We will log you in securely with your credentials.</p>
+                    <div class="input-group">
+                        <input type="email" name="txt_email" placeholder="Enter your Email" required />
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="txt_pass" placeholder="Enter your Password" required />
+                    </div>
+                    <button type="submit" class="form-btn">Login</button>
+                    <div class="feedback-row">
+                        <div class="signup">
+                            New Member? <a href="#" onclick="showForm('signup')">Sign Up Now</a>
+                        </div>
+                        <div class="forgot">
+                            <a href="{% url 'wguest:forget_password' %}">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="signupForm" method="post" enctype="multipart/form-data" style="display:none" action="{% url 'wguest:signup' %}" novalidate>
+                    {% csrf_token %}
+                    <h2>Create Your Account</h2>
+                    <p>Please fill in the details to register.</p>
+                    <div class="input-group">
+                        <input type="text" name="txt_fname" placeholder="Enter First Name" >
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="txt_lname" placeholder="Enter Last Name" required pattern="[A-Za-z ]+" title="Only alphabets and spaces allowed">
+                    </div>
+                    <div class="gender-group">
+                        Gender:
+                        <label><input type="radio" name="txt_gender" value="M" > Male</label>
+                        <label><input type="radio" name="txt_gender" value="F"> Female</label>
+                        <label><input type="radio" name="txt_gender" value="O"> Other</label>
+                        <span class="gender-error" style="margin-left: 15px; color: red; font-size: 12px;"></span>
+                    </div>
+                    <div class="input-group" style="padding: 0;">
+    <div style="display: flex; width: 100%; background-color: white; border-radius: 30px; overflow: hidden; border: 1px solid #ccc;">
+        <span style="padding: 10px 6px 10px 14px; font-size: 15px; display: flex; align-items: center;">+</span>
+        <input type="text" name="country_code" value="44" maxlength="2" style="width: 40px; padding: 10px 6px 10px 0px; border: none; font-size: 14px; text-align: center;">
+        <div style="width: 1px; background-color: #ccc;"></div>
+        <input type="tel" name="txt_phone" maxlength="10" placeholder="Enter 10 digit phone number" style="flex: 1; padding: 10px 12px; border: none; font-size: 14px;">
+    </div>
+    <!-- Place this after the phone group for error display -->
+    <div class="phone-error"></div>
+</div>
+
+                    <div class="input-group">
+                        <input type="email" name="txt_email" id="email" placeholder="Enter Email">
+
+                    </div>
+                    <div class="input-group">
+                        <input type="email" name="txt_confirmemail" placeholder="Confirm Email" >
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="txt_password" placeholder="Enter Password" >
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="txt_confirmpassword" placeholder="Confirm Password" >
+                    </div>
+                    <button type="submit" class="form-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: Login/Signup Container -->
+
+    <!-- Script Logic -->
+    <script src="{% static 'UserTemplate/js/jquery.min.js' %}"></script>
+<script src="{% static 'UserTemplate/js/jquery.validate.min.js' %}"></script>
+
+<script>
+    // Show login/signup toggle
+    function showForm(type) {
+        const loginForm = document.getElementById("loginForm");
+        const signupForm = document.getElementById("signupForm");
+        const loginToggle = document.getElementById("loginToggle");
+        const signupToggle = document.getElementById("signupToggle");
+
+        if (type === 'login') {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            loginToggle.classList.add("active");
+            signupToggle.classList.remove("active");
+        } else {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+            loginToggle.classList.remove("active");
+            signupToggle.classList.add("active");
+        }
+    }
+
+    // Add custom regex method
+jQuery.validator.addMethod("regex", function (value, element, pattern) {
+    return this.optional(element) || pattern.test(value);
+}, "Invalid format");
+
+$(document).ready(function () {
+    $("#signupForm").validate({
+        rules: {
+            txt_fname: {
+                required: true,
+                regex: /^[A-Za-z ]+$/
+            },
+            txt_lname: {
+                required: true,
+                regex: /^[A-Za-z ]+$/
+            },
+            txt_gender: "required",
+            country_code: {
+                required: true,
+                digits: true,
+                maxlength: 2
+            },
+            txt_phone: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            txt_email: {
+                required: true,
+                email: true
+            },
+            txt_confirmemail: {
+                required: true,
+                email: true,
+                equalTo: "#email"
+            },
+            txt_password: {
+    required: true,
+    minlength: 6,
+    regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/
+},
+            txt_confirmpassword: {
+                required: true,
+                equalTo: "#password"
+            }
+        },
+        messages: {
+            txt_fname: {
+                required: "First Name is required",
+                regex: "Only alphabets and spaces allowed"
+            },
+            txt_lname: {
+                required: "Last Name is required",
+                regex: "Only alphabets and spaces allowed"
+            },
+            txt_confirmemail: {
+                equalTo: "Emails do not match"
+            },
+            txt_password: {
+    required: "Password is required",
+    minlength: "Password must be at least 6 characters long",
+    regex: "Password must contain an uppercase letter, number, and special character"
+},
+            txt_confirmpassword: {
+                equalTo: "Passwords do not match"
+            }
+        },
+
+        // 👇 INSERT THIS HERE:
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "txt_phone" || element.attr("name") === "country_code") {
+                $(".phone-error").html(error); // Place it below the phone group
+            } else if (element.attr("name") === "txt_gender") {
+    $(".gender-error").html(error); // Place to the right via custom span
+
+
+            } else {
+                error.insertAfter(element); // Default behavior
+            }
+        },
+
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+$("#loginForm").validate({
+            rules: {
+                txt_email: {
+                    required: true,
+                    email: true
+                },
+                txt_pass: {
+                    required: true
+                }
+            },
+            messages: {
+                txt_email: {
+                    required: "Email is required",
+                    email: "Please enter a valid email address"
+                },
+                txt_pass: {
+                    required: "Password is required"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+</script>
+
+{% if msg %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        alert("{{ msg }}");
+        {% if show_signup %}
+            showForm('signup');
+        {% endif %}
+    });
+</script>
+{% endif %}
+
+<script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+
+</body>
+
+</html>

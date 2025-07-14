@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="{% static 'UserTemplate/favicon.png' %}" />
+  <meta name="description" content="User Profile Page" />
+  <meta name="keywords" content="profile, user, account" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+  <title>My Profile — The Comfort Space</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .profile-details {
+      padding: 20px;
+    }
+    .profile-details h5 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .profile-details p {
+      font-size: 1.1rem;
+      color: #000;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li class="active"><a href="{%  url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+            <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
+            <span class="icon-sign-out"></span></a></li>
+          </ul>
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <div class="hero page-inner overlay" style="background-image: url('{% static 'Usertemplate/images/hero_bg_1.jpg' %}')">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">My Profile</h1>
+          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+            <ol class="breadcrumb text-center justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+              <li class="breadcrumb-item active text-white-50" aria-current="page">My Profile</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE SECTION -->
+  <div class="section pt-5 container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+        <div class="box-feature p-4">
+          <div class="profile-details">
+            <div class="row mb-4">
+              <div class="col-md-6 mb-4">
+                <h5 class="text-primary">First Name</h5>
+                <p>{{ user.user_firstname }}</p>
+              </div>
+              <div class="col-md-6 mb-4">
+                <h5 class="text-primary">Last Name</h5>
+                <p>{{ user.user_lastname }}</p>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-6 mb-4">
+                <h5 class="text-primary">Email</h5>
+                <p>{{ user.user_email }}</p>
+              </div>
+              <div class="col-md-6 mb-4">
+                <h5 class="text-primary">Contact</h5>
+                <p>{{ user.user_phone }}</p>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <h5 class="text-primary">Gender</h5>
+                <p>
+                  {% if user.user_gender == 'M' %}
+                    Male
+                  {% elif user.user_gender == 'F' %}
+                    Female
+                  {% else %}
+                    Other
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-5 pt-4 border-top">
+            <a href="{% url 'wuser:editprofile' %}" class="btn btn-primary py-2 px-4 me-3">Edit Profile</a>
+            <a href="{% url 'wuser:changepassword' %}" class="btn btn-outline-primary py-2 px-4">Change Password</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li>
+                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="widget">
+          <h3>Links</h3>
+          <ul class="list-unstyled links">
+            <li><a href="#">Our Vision</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+          <ul class="list-unstyled social">
+            <li>
+              <a href="#"><span class="icon-instagram"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-twitter"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-facebook"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-linkedin"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-pinterest"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-dribbble"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All Rights Reserved. &mdash; Designed with love by
+          <a href="#">Bi.Enterprise</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+</body>
+</html>

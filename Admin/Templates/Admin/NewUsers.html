@@ -1,0 +1,98 @@
+{% extends 'Admin/NavBar.html' %}  {% block title %}User List{% endblock %}
+
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">User List
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+                    <div class="card-title">
+                        <h2 style="color: rgb(29, 73, 154);">Registered Users</h2>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <form method="get" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by email or phone">
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{% url 'wadmin:userlist' %}" class="btn btn-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="table-responsive">
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                                <thead>
+                                    <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-50px">Sl No</th>
+                                        <th class="min-w-125px">First Name</th>
+                                        <th class="min-w-125px">Last Name</th>
+                                        <th class="min-w-125px">Email</th>
+                                        <th class="min-w-125px">Gender</th>
+                                        <th class="min-w-125px">Phone Number</th>
+                                        <th class="min-w-125px">Verification</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-600 fw-bold">
+                                    {% for user in items %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ user.user_firstname}}</td>
+                                        <td>{{ user.user_lastname}}</td>
+                                        <td>{{ user.user_email }}</td>
+                                        <td>{{ user.user_gender }}</td>
+                                        <td>{{ user.user_phone }}</td>
+                                   <td>
+    {% if user.verify_status == 1 %}
+        <a href="{% url 'wadmin:verifyuser' user.id %}" class="btn btn-sm btn-success">Verify</a>
+    <a href="{% url 'wadmin:rejectuser' user.id %}" class="btn btn-sm btn-danger">Reject</a>
+    {% endif %}
+</td>
+
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No users found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                    <div class="d-flex justify-content-center mt-5">
+                        {% if items.has_previous %}
+                            <a href="?page=1" class="btn btn-light-primary btn-sm me-2">First</a>
+                            <a href="?page={{ items.previous_page_number }}" class="btn btn-light-primary btn-sm me-2">Previous</a>
+                        {% endif %}
+
+                        <span class="align-self-center mx-2 text-muted fw-bold">Page {{ items.number }} of {{ items.paginator.num_pages }}</span>
+
+                        {% if items.has_next %}
+                            <a href="?page={{ items.next_page_number }}" class="btn btn-light-primary btn-sm ms-2">Next</a>
+                            <a href="?page={{ items.paginator.num_pages }}" class="btn btn-light-primary btn-sm ms-2">Last</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

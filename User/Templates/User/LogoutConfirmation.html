@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Confirm Logout | The Comfort Space</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/bootstrap.min.css' %}">
+
+  <!-- Custom CSS (inline for convenience) -->
+  <style>
+    /* ───────────────────────────────────────────── */
+    /* Logout Confirm — custom styles               */
+    /* ───────────────────────────────────────────── */
+
+    /* ----------  Theme variables  ---------- */
+    :root {
+      --bg-grad-start:   #f7f9fc;
+      --bg-grad-end:     #e9eff6;
+      --card-bg:         #ffffff;
+      --card-shadow:     0 12px 30px rgba(0, 0, 0, 0.08);
+      --radius-lg:       1rem;        /* 16 px */
+      --btn-primary:     #0d6efd;
+      --btn-primary-hov: #0b5ed7;
+      --transition-fast: 0.15s ease;
+    }
+
+    /* ----------  Page backdrop  ---------- */
+    body {
+      background: linear-gradient(135deg,
+                  var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', 'Work Sans', sans-serif;
+      animation: fade-in 0.6s ease-out;
+    }
+
+    /* ----------  Card  ---------- */
+    .logout-card {
+      max-width: 420px;
+      width: 100%;
+      background: var(--card-bg);
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(2px);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .logout-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+    }
+    .logout-card h3 {
+      font-weight: 600;
+      color: #1d1f20;
+    }
+
+    /* ----------  Buttons  ---------- */
+    .logout-card .btn {
+      padding: 0.55rem 1.75rem;
+      font-weight: 500;
+      border-radius: 2rem;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .logout-card .btn-primary {
+      background-color: var(--btn-primary);
+      border-color: var(--btn-primary);
+    }
+    .logout-card .btn-primary:hover,
+    .logout-card .btn-primary:focus {
+      background-color: var(--btn-primary-hov);
+      border-color: var(--btn-primary-hov);
+      box-shadow: 0 8px 22px rgba(13, 110, 253, 0.35);
+      transform: translateY(-1px);
+    }
+    .logout-card .btn-outline-secondary:hover,
+    .logout-card .btn-outline-secondary:focus {
+      background-color: #e9ecef;
+      color: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+    }
+    .logout-card .btn:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    /* ----------  Animation  ---------- */
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0);     }
+    }
+
+    /* ----------  Mobile tweaks  ---------- */
+    @media (max-width: 480px) {
+      .logout-card { padding: 2rem 1.25rem; }
+      .logout-card h3 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card logout-card text-center">
+    <h3 class="mb-4">Are you sure you want to log out?</h3>
+
+    <form method="post" class="d-inline">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" name="confirm" value="yes" class="btn btn-primary me-2">
+        Yes
+      </button>
+      <button type="submit" name="confirm" value="no" class="btn btn-outline-secondary">
+        No
+      </button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS (includes Popper) -->
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

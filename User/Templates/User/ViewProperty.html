@@ -1,0 +1,525 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" href="{% static 'UserTemplate/favicon.png' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+
+  <title>Properties | The Comfort Space</title>
+    <style>
+      .property-img-wrapper {
+        width: 100%;
+        aspect-ratio: 8 / 7;   /* maintains 16:9 aspect ratio */
+        overflow: hidden;
+      }
+
+      .property-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+
+
+    </style>
+</head>
+
+<body>
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li class="active"><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li><a href="{%  url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+            <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
+            <span class="icon-sign-out"></span></a></li>
+          </ul>
+
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero page-inner overlay"
+    style="background-image: url(&quot;{% static 'Usertemplate/images/hero_bg_1.jpg' %}&quot;)">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">Properties</h1>
+
+          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+            <ol class="breadcrumb text-center justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+              <li class="breadcrumb-item active text-white-50" aria-current="page">
+                Properties
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section pt-5">
+    <div class="container">
+      <form method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+          <div class="col-lg-12 mb-4">
+            <div class="row g-3">
+              <div class="col-md-8">
+                <input type="text" style="border-radius: 25px;" class="form-control form-search" name="search_query"
+                  placeholder="Search by Postcode" value="{{ search_query }}">
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+              </div>
+              <div class="col-md-2">
+                <a href="{% url 'wuser:viewproperty' %}" class="btn btn-info w-100">Clear</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <button class="btn btn-dark mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#filtersPanel"
+      aria-controls="filtersPanel">
+      Show Filters
+    </button>
+  </div>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="filtersPanel" aria-labelledby="filtersPanelLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="filtersPanelLabel">Filters</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="search_query" value="{{ search_query }}">
+    <!-- Property Type (Multi-Select Checkboxes) -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Property Type</label><br>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="property_type" value="room_in_existing"
+        {% if 'room_in_existing' in selected_property_types %}checked{% endif %}>
+        <label class="form-check-label">Room in existing share</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="property_type" value="studio"
+        {% if 'studio' in selected_property_types %}checked{% endif %}>
+        <label class="form-check-label">Studio/2 bed flats</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="property_type" value="whole_property"
+        {% if 'whole_property' in selected_property_types %}checked{% endif %}>
+        <label class="form-check-label">Whole Property</label>
+      </div>
+    </div>
+
+    <!-- Price Range -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Min Price (₹)</label>
+      <input type="number" class="form-control" name="min_price" min="0" value="{{ request.POST.min_price }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Max Price (₹)</label>
+      <input type="number" class="form-control" name="max_price" min="0" value="{{ request.POST.max_price }}">
+    </div>
+
+    <!-- Room Size -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Room Size</label>
+      <select class="form-select" name="room_size">
+        <option value="">Any</option>
+        <option value="single" {% if request.POST.room_size == 'single' %}selected{% endif %}>Single Room</option>
+        <option value="double" {% if request.POST.room_size == 'double' %}selected{% endif %}>Double Room</option>
+      </select>
+    </div>
+<div class="mb-3">
+      <label class="form-label fw-bold">Rent Type</label>
+      <select class="form-select" name="rent_type">
+        <option value="">Any</option>
+        <option value="weekly" {% if request.POST.rent_type == 'weekly' %}selected{% endif %}>Weekly</option>
+        <option value="monthly" {% if request.POST.rent_type == 'monthly' %}selected{% endif %}>Monthly</option>
+      </select>
+    </div>
+
+    <!-- Bills Included -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Bills Included</label>
+      <select class="form-select" name="bills_included">
+        <option value="">Any</option>
+        <option value="true" {% if request.POST.bills_included == 'true' %}selected{% endif %}>Yes</option>
+        <option value="false" {% if request.POST.bills_included == 'false' %}selected{% endif %}>No</option>
+      </select>
+    </div>
+
+    <!-- En-suite -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">En-suite</label>
+      <select class="form-select" name="is_en_suite">
+        <option value="">Any</option>
+        <option value="true" {% if request.POST.is_en_suite == 'true' %}selected{% endif %}>Yes</option>
+        <option value="false" {% if request.POST.is_en_suite == 'false' %}selected{% endif %}>No</option>
+      </select>
+    </div>
+
+    <!-- Short Term Stay -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Short Term Stay</label>
+      <select class="form-select" name="short_term">
+        <option value="">Any</option>
+        <option value="true" {% if request.POST.short_term == 'true' %}selected{% endif %}>Yes</option>
+        <option value="false" {% if request.POST.short_term == 'false' %}selected{% endif %}>No</option>
+      </select>
+    </div>
+
+    <!-- Room Furnishing -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Room Furnishing</label>
+      <select class="form-select" name="room_furnishing">
+        <option value="">Any</option>
+        <option value="furnished" {% if request.POST.room_furnishing == 'furnished' %}selected{% endif %}>Furnished</option>
+        <option value="unfurnished" {% if request.POST.room_furnishing == 'unfurnished' %}selected{% endif %}>Unfurnished</option>
+      </select>
+    </div>
+
+    <!-- Share Occupation -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Share Occupation</label>
+      <select class="form-select" name="share_occupation">
+        <option value="">Any</option>
+        <option value="student" {% if request.POST.share_occupation == 'student' %}selected{% endif %}>Student</option>
+        <option value="professional" {% if request.POST.share_occupation == 'professional' %}selected{% endif %}>Professional</option>
+      </select>
+    </div>
+
+    <!-- Room For -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Room For</label>
+      <select class="form-select" name="room_for">
+        <option value="">Any</option>
+        <option value="male" {% if request.POST.room_for == 'male' %}selected{% endif %}>Male</option>
+        <option value="female" {% if request.POST.room_for == 'female' %}selected{% endif %}>Female</option>
+        <option value="any" {% if request.POST.room_for == 'any' %}selected{% endif %}>Any</option>
+      </select>
+    </div>
+
+    <!-- Share Gender -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Share Gender</label>
+      <select class="form-select" name="share_gender">
+        <option value="">Any</option>
+        <option value="mixed" {% if request.POST.share_gender == 'mixed' %}selected{% endif %}>Mixed</option>
+        <option value="male_only" {% if request.POST.share_gender == 'male_only' %}selected{% endif %}>Male Only</option>
+        <option value="female_only" {% if request.POST.share_gender == 'female_only' %}selected{% endif %}>Female Only</option>
+      </select>
+    </div>
+
+    <!-- Household Option -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Household Option</label>
+      <select class="form-select" name="household_option">
+        <option value="">Any</option>
+        <option value="pets_allowed" {% if request.POST.household_option == 'pets_allowed' %}selected{% endif %}>Pets Allowed</option>
+        <option value="no_pets" {% if request.POST.household_option == 'no_pets' %}selected{% endif %}>No Pets</option>
+      </select>
+    </div>
+
+    <!-- Property Habit -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Property Habit</label>
+      <select class="form-select" name="property_habit">
+        <option value="">Any</option>
+        <option value="smoking_allowed" {% if request.POST.property_habit == 'smoking_allowed' %}selected{% endif %}>Smoking Allowed</option>
+        <option value="no_smoking" {% if request.POST.property_habit == 'no_smoking' %}selected{% endif %}>No Smoking</option>
+      </select>
+    </div>
+
+    <!-- Current Status -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Current Status</label>
+      <select class="form-select" name="current_status">
+        <option value="">Any</option>
+        <option value="available" {% if request.POST.current_status == 'available' %}selected{% endif %}>Available</option>
+        <option value="occupied" {% if request.POST.current_status == 'occupied' %}selected{% endif %}>Occupied</option>
+      </select>
+    </div>
+    <!-- (Other filters remain unchanged since their request.POST.XXX usage is okay) -->
+    <!-- Copy your existing filter blocks for rent_type, bills_included, etc here -->
+
+    <!-- Active Filter Summary -->
+    <div class="mb-3 p-2 bg-light rounded border">
+      <h6 class="mb-2">Active Filters:</h6>
+      <ul class="list-unstyled small">
+        {% for type in selected_property_types %}
+          <li><span class="icon-home"> </span>{{ type|title }}</li>
+        {% endfor %}
+        {% if request.POST.min_price %}<li>Min Price: ₹{{ request.POST.min_price }}</li>{% endif %}
+        {% if request.POST.max_price %}<li>Max Price: ₹{{ request.POST.max_price }}</li>{% endif %}
+        {% if request.POST.room_size %}<li>Room Size: {{ request.POST.room_size|title }}</li>{% endif %}
+        {% if request.POST.rent_type %}<li>Rent Type: {{ request.POST.rent_type|title }}</li>{% endif %}
+        {% if request.POST.bills_included %}<li>Bills Included: {% if request.POST.bills_included == 'true' %}Yes{% else %}No{% endif %}</li>{% endif %}
+        {% if request.POST.is_en_suite %}<li>En-suite: {% if request.POST.is_en_suite == 'true' %}Yes{% else %}No{% endif %}</li>{% endif %}
+        {% if request.POST.short_term %}<li>Short Term: {% if request.POST.short_term == 'true' %}Yes{% else %}No{% endif %}</li>{% endif %}
+        {% if request.POST.room_furnishing %}<li>Furnishing: {{ request.POST.room_furnishing|title }}</li>{% endif %}
+        {% if request.POST.share_occupation %}<li>Occupation: {{ request.POST.share_occupation|title }}</li>{% endif %}
+        {% if request.POST.room_for %}<li>Room For: {{ request.POST.room_for|title }}</li>{% endif %}
+        {% if request.POST.share_gender %}<li>Share Gender: {{ request.POST.share_gender|title }}</li>{% endif %}
+        {% if request.POST.household_option %}<li>Household: {{ request.POST.household_option|title }}</li>{% endif %}
+        {% if request.POST.property_habit %}<li>Habit: {{ request.POST.property_habit|title }}</li>{% endif %}
+        {% if request.POST.current_status %}<li>Status: {{ request.POST.current_status|title }}</li>{% endif %}
+        {% if not selected_property_types and not request.POST.min_price and not request.POST.max_price and not request.POST.room_size and not request.POST.rent_type and not request.POST.bills_included and not request.POST.is_en_suite and not request.POST.short_term and not request.POST.room_furnishing and not request.POST.share_occupation and not request.POST.room_for and not request.POST.share_gender and not request.POST.household_option and not request.POST.property_habit and not request.POST.current_status %}
+          <li class="text-muted">No filters applied</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+    <a href="{% url 'wuser:viewproperty' %}" class="btn btn-outline-secondary w-100 mt-2">Reset</a>
+  </form>
+</div>
+
+  </div>
+
+ <div class="section section-properties">
+  <div class="container">
+    <div class="row">
+      {% if properties %}
+      {% for prop in properties %}
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="property-item mb-4">
+           <!-- Image Section -->
+          <a href="{% url 'wuser:viewdetails' prop.id %}" class="img">
+            <div class="property-img-wrapper">
+              {% if prop.images and prop.images.0.image %}
+              <img src="{{ prop.images.0.image.url }}" alt="{{ prop.title }}">
+              {% else %}
+              <img src="{% static 'UserTemplate/images/img_2.jpg' %}" alt="Default Property Image">
+              {% endif %}
+            </div>
+          </a>
+
+           <!-- Property Content -->
+          <div class="property-content p-3" style="margin-top:-20px;">
+
+            <!-- Rate Section -->
+            <div class="mb-3">
+              <span class="fs-6">£ {{ prop.rate }} / {{ prop.get_rent_type_display }}</span>
+            </div>
+
+            <!-- Property Info -->
+            <div>
+              <span class="d-block mb-2 fw-bold fs-5 text-dark">{{ prop.title }}</span>
+              <span class="city d-block mb-3 fw-normal fs-6 text-muted">{{ prop.address }}, {{ prop.postcode }}</span>
+              <!-- Specs -->
+              <div class="specs d-flex mb-4">
+                <span class="d-block d-flex align-items-center me-3">
+                  <span class="icon-bed me-2"></span>
+                  <span class="caption text-secondary">{{ prop.no_of_bedrooms }} bedrooms</span>
+                </span>
+                <span class="d-block d-flex align-items-center me-3">
+                  <span class="icon-home2 me-2"></span>
+                  <span
+                    class="caption text-secondary fw-bold {% if prop.current_status == 'available' %}text-success{% else %}text-warning{% endif %}">
+                    {{ prop.get_current_status_display }}
+                  </span>
+                </span>
+              </div>
+
+              <!-- CTA Button -->
+              <a href="{% url 'wuser:viewdetails' prop.id %}" class="btn btn-primary btn-sm py-2 px-3 rounded-pill shadow-sm">See
+                details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+      {% else %}
+      <div class="col-12 text-center">
+        <div class="alert alert-info mt-5" role="alert">
+          <strong>No Properties to Display.</strong> Your search or filter returned no results.
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+
+      {% if page_obj.has_other_pages %}
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mt-4">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&laquo;</span>
+          </li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+          <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&raquo;</span>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+
+<div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li>
+                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="widget">
+          <h3>Links</h3>
+          <ul class="list-unstyled links">
+            <li><a href="#">Our Vision</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+          <ul class="list-unstyled social">
+            <li>
+              <a href="#"><span class="icon-instagram"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-twitter"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-facebook"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-linkedin"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-pinterest"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-dribbble"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All Rights Reserved. &mdash; Designed with love by
+          <a href="#">Bi.Enterprise</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+  
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("#filtersPanel form");
+      const minPriceInput = form.querySelector('input[name="min_price"]');
+      const maxPriceInput = form.querySelector('input[name="max_price"]');
+
+      form.addEventListener("submit", function (event) {
+        const minPrice = parseFloat(minPriceInput.value) || 0;
+        const maxPrice = parseFloat(maxPriceInput.value) || 0;
+
+        if (maxPrice && minPrice && maxPrice < minPrice) {
+          event.preventDefault();
+          alert("Maximum Price cannot be less than Minimum Price.");
+          maxPriceInput.focus();
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

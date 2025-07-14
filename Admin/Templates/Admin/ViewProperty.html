@@ -1,0 +1,159 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}Property Listings{% endblock %}
+{% load static %}
+
+{% block content %}
+ <style>
+.custom-delete-icon{
+    border: none;
+    outline: none;
+    background-color:#fff;
+ }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Property Listings
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+                    <div class="card-title">
+                        <h2>Available Properties</h2>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <form method="post" class="mb-4">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-start gap-3">
+                            <button type="submit" name="filter_type" value="studio" class="btn btn-sm btn-primary">
+                                Show Studios/2BHK
+                            </button>
+                            <button type="submit" name="filter_type" value="whole_property"
+                                class="btn btn-sm btn-primary">
+                                Show Whole Property
+                            </button>
+                            <button type="submit" name="filter_type" value="room_in_existing"
+                                class="btn btn-sm btn-primary">
+                                Show Room in Existing Share
+                            </button>
+                            <button type="submit" name="filter_type" value="all" class="btn btn-sm btn-secondary">
+                                Show All
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="mb-4">
+
+                    {% if properties is not None %}
+                    {% if properties %}
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        {% for prop in properties %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    {% if prop.gallery_images.first %}
+                                    <img src="{{ prop.gallery_images.first.image.url }}" class="card-img-top rounded"
+                                        alt="Property Image" style="height: 200px; width: 100%; object-fit: cover;">
+                                    {% else %}
+                                    <img src="{% static 'default-room.jpg' %}" class="card-img-top rounded"
+                                        alt="No Image Available" style="height: 200px; width: 100%; object-fit: cover;">
+                                    {% endif %}
+                                    <h5 class="card-title text-dark fw-bolder">{{ prop.title }}</h5>
+                                    <p class="card-text text-muted mb-1"><strong>Address:</strong> {{ prop.address }}
+                                    </p>
+                                    <p class="card-text text-muted mb-1"><strong>Postcode:</strong> {{ prop.postcode }}
+                                    </p>
+                                    <p class="card-text text-muted mb-1"><strong>Rent:</strong>
+                                        £{{ prop.rate }} / {{ prop.rent_type }}</p>
+
+                                    <p class="card-text text-muted mb-3"><strong>Status:</strong>
+                                        <span
+                                            class="badge {% if prop.current_status == 'available' %}badge-light-success{% else %}badge-light-warning{% endif %}">
+                                            {{ prop.get_current_status_display }}
+                                        </span>
+                                    </p>
+                                    <div class="d-flex align-items-center gap-2 mt-3">
+                                        <a href="{% url 'wadmin:viewmore' prop.id %}" class="btn btn-sm btn-light-primary"
+                                            title="View Property">
+                                            View More
+                                        </a>
+
+
+                                        <a href="{% url 'wadmin:viewmore' prop.id %}?edit=true" 
+                                            title="Edit Property">&nbsp;
+                                              <span class="svg-icon svg-icon-info svg-icon-2x">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+
+                                                    <defs />
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path
+                                                            d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                                            fill="#000000" fill-rule="nonzero"
+                                                            transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15"
+                                                            height="2" rx="1" />
+                                                    </g>
+                                                </svg>
+                                            </span>&nbsp;</a>
+
+
+                                        <form method="post" action="{% url 'wadmin:viewmore' prop.id %}"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Are you sure you want to delete this property?');">
+                                            {% csrf_token %}
+                                            <button type="submit" name="delete" title="Delete Property"  class="custom-delete-icon">&nbsp;
+                                                <span class="svg-icon svg-icon-danger svg-icon-2x">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                        viewBox="0 0 24 24" version="1.1">
+                                                        <defs />
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <path
+                                                                d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                fill="#000000" fill-rule="nonzero" />
+                                                            <path
+                                                                d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                fill="#000000" opacity="0.3" />
+                                                        </g>
+                                                    </svg>
+                                                </span>&nbsp;
+                                            </button>
+                                        </form>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center" role="alert">
+                        <strong>No Properties to Display</strong> for the selected filter.
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="alert alert-info text-center" role="alert">
+                        Select a filter to display properties.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

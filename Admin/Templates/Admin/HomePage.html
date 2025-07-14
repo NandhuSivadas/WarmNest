@@ -1,0 +1,231 @@
+{% extends 'Admin/NavBar.html' %}
+
+{% block title %}Admin HomePage{% endblock %}
+
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Dashboard
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+                    <h2 class="card-title fs-2 fw-bolder">System Overview</h2>
+                </div>
+                <div class="card-body pt-0">
+
+                    <!-- Row 1 -->
+                    <div class="row g-5 g-xl-8">
+                        <!-- Total Verified Users -->
+                        <div class="col-xl-6">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-primary svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path
+                                                        d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                    <path
+                                                        d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                                        fill="#000000" fill-rule="nonzero" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-primary fs-1">{{ total_users }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">Total Verified Users</h4>
+                                    <p class="text-muted fs-7">Number of verified users on the
+                                        platform</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Properties -->
+                        <div class="col-xl-6">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-warning svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path
+                                                        d="M3.95709826,8.41510662 L11.47855,3.81866389 C11.7986624,3.62303967 12.2013376,3.62303967 12.52145,3.81866389 L20.0429,8.41510557 C20.6374094,8.77841684 21,9.42493654 21,10.1216692 L21,19.0000642 C21,20.1046337 20.1045695,21.0000642 19,21.0000642 L4.99998155,21.0000673 C3.89541205,21.0000673 2.99998155,20.1046368 2.99998155,19.0000673 L2.99999828,10.1216672 C2.99999935,9.42493561 3.36258984,8.77841732 3.95709826,8.41510662 Z M10,13 C9.44771525,13 9,13.4477153 9,14 L9,17 C9,17.5522847 9.44771525,18 10,18 L14,18 C14.5522847,18 15,17.5522847 15,17 L15,14 C15,13.4477153 14.5522847,13 14,13 L10,13 Z"
+                                                        fill="#000000" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-warning fs-1">{{ total_properties }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">Total Properties</h4>
+                                    <p class="text-muted fs-7">Total number of properties listed in the system</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="row g-5 g-xl-8 mt-1">
+                        <!-- New Registrations -->
+                        <div class="col-xl-6">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-success svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path
+                                                        d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                    <path
+                                                        d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                                        fill="#000000" fill-rule="nonzero" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-success fs-1">{{ new_registrations }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">New Registrations</h4>
+                                    <p class="text-muted fs-7">Users pending verification or newly signed up</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Inquiries -->
+                        <div class="col-xl-6">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3 ">
+                                        <span class="svg-icon svg-icon-primary svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path
+                                                        d="M5,9 L19,9 C20.1045695,9 21,9.8954305 21,11 L21,20 C21,21.1045695 20.1045695,22 19,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,11 C3,9.8954305 3.8954305,9 5,9 Z M18.1444251,10.8396467 L12,14.1481833 L5.85557487,10.8396467 C5.4908718,10.6432681 5.03602525,10.7797221 4.83964668,11.1444251 C4.6432681,11.5091282 4.77972206,11.9639747 5.14442513,12.1603533 L11.6444251,15.6603533 C11.8664074,15.7798822 12.1335926,15.7798822 12.3555749,15.6603533 L18.8555749,12.1603533 C19.2202779,11.9639747 19.3567319,11.5091282 19.1603533,11.1444251 C18.9639747,10.7797221 18.5091282,10.6432681 18.1444251,10.8396467 Z"
+                                                        fill="#000000" />
+                                                    <path
+                                                        d="M11.1288761,0.733697713 L11.1288761,2.69017121 L9.12120481,2.69017121 C8.84506244,2.69017121 8.62120481,2.91402884 8.62120481,3.19017121 L8.62120481,4.21346991 C8.62120481,4.48961229 8.84506244,4.71346991 9.12120481,4.71346991 L11.1288761,4.71346991 L11.1288761,6.66994341 C11.1288761,6.94608579 11.3527337,7.16994341 11.6288761,7.16994341 C11.7471877,7.16994341 11.8616664,7.12798964 11.951961,7.05154023 L15.4576222,4.08341738 C15.6683723,3.90498251 15.6945689,3.58948575 15.5161341,3.37873564 C15.4982803,3.35764848 15.4787093,3.33807751 15.4576222,3.32022374 L11.951961,0.352100892 C11.7412109,0.173666017 11.4257142,0.199862688 11.2472793,0.410612793 C11.1708299,0.500907473 11.1288761,0.615386087 11.1288761,0.733697713 Z"
+                                                        fill="#000000" fill-rule="nonzero" opacity="0.3"
+                                                        transform="translate(11.959697, 3.661508) rotate(-270.000000) translate(-11.959697, -3.661508) " />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-primary fs-1">{{ total_inquiries }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">Total Inquiries</h4>
+                                    <p class="text-muted fs-7">property inquiries received in the system
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="row g-5 g-xl-8 mt-1">
+                        <!-- Pending Messages -->
+                        <div class="col-xl-4">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-info svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path
+                                                        d="M12.9835977,18 C12.7263047,14.0909841 9.47412135,11 5.5,11 C4.98630124,11 4.48466491,11.0516454 4,11.1500272 L4,7 C4,5.8954305 4.8954305,5 6,5 L20,5 C21.1045695,5 22,5.8954305 22,7 L22,16 C22,17.1045695 21.1045695,18 20,18 L12.9835977,18 Z M19.1444251,6.83964668 L13,10.1481833 L6.85557487,6.83964668 C6.4908718,6.6432681 6.03602525,6.77972206 5.83964668,7.14442513 C5.6432681,7.5091282 5.77972206,7.96397475 6.14442513,8.16035332 L12.6444251,11.6603533 C12.8664074,11.7798822 13.1335926,11.7798822 13.3555749,11.6603533 L19.8555749,8.16035332 C20.2202779,7.96397475 20.3567319,7.5091282 20.1603533,7.14442513 C19.9639747,6.77972206 19.5091282,6.6432681 19.1444251,6.83964668 Z"
+                                                        fill="#000000" />
+                                                    <path
+                                                        d="M8.4472136,18.1055728 C8.94119209,18.3525621 9.14141644,18.9532351 8.89442719,19.4472136 C8.64743794,19.9411921 8.0467649,20.1414164 7.5527864,19.8944272 L5,18.618034 L5,14.5 C5,13.9477153 5.44771525,13.5 6,13.5 C6.55228475,13.5 7,13.9477153 7,14.5 L7,17.381966 L8.4472136,18.1055728 Z"
+                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-info fs-1">{{ pending_msg }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">Pending Messages</h4>
+                                    <p class="text-muted fs-7">Messages waiting for an admin response</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Available Properties -->
+                        <div class="col-xl-4">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-success svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                                    <path
+                                                        d="M16.7689447,7.81768175 C17.1457787,7.41393107 17.7785676,7.39211077 18.1823183,7.76894473 C18.5860689,8.1457787 18.6078892,8.77856757 18.2310553,9.18231825 L11.2310553,16.6823183 C10.8654446,17.0740439 10.2560456,17.107974 9.84920863,16.7592566 L6.34920863,13.7592566 C5.92988278,13.3998345 5.88132125,12.7685345 6.2407434,12.3492086 C6.60016555,11.9298828 7.23146553,11.8813212 7.65079137,12.2407434 L10.4229928,14.616916 L16.7689447,7.81768175 Z"
+                                                        fill="#000000" fill-rule="nonzero" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bolder text-success fs-1">{{ available_properties }}</div>
+                                    <h4 class="fw-bold text-dark mt-2">Available Properties</h4>
+                                    <p class="text-muted fs-7">Properties currently available for booking</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Most Saved Property -->
+                        <div class="col-xl-4">
+                            <div class="card shadow-sm text-center">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span class="svg-icon svg-icon-danger svg-icon-3x mr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path
+                                                        d="M3.95709826,8.41510662 L11.47855,3.81866389 C11.7986624,3.62303967 12.2013376,3.62303967 12.52145,3.81866389 L20.0429,8.41510557 C20.6374094,8.77841684 21,9.42493654 21,10.1216692 L21,19.0000642 C21,20.1046337 20.1045695,21.0000642 19,21.0000642 L4.99998155,21.0000673 C3.89541205,21.0000673 2.99998155,20.1046368 2.99998155,19.0000673 C2.99998155,19.0000663 2.99998155,19.0000652 2.99998155,19.0000642 L2.99999828,10.1216672 C2.99999935,9.42493561 3.36258984,8.77841732 3.95709826,8.41510662 Z"
+                                                        fill="#000000" opacity="0.3" />
+                                                    <path
+                                                        d="M13.8,12 C13.1562,12 12.4033,12.7298529 12,13.2 C11.5967,12.7298529 10.8438,12 10.2,12 C9.0604,12 8.4,12.8888719 8.4,14.0201635 C8.4,15.2733878 9.6,16.6 12,18 C14.4,16.6 15.6,15.3 15.6,14.1 C15.6,12.9687084 14.9396,12 13.8,12 Z"
+                                                        fill="#000000" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    
+                                    {% if most_saved_property %}
+                                    <p class="fs-1 fw-bold text-danger mb-0">{{ most_saved_property.title }}</p>
+                                    <h4 class="fw-bold text-dark mt-2">Most Saved Property</h4>
+                                    <p class="text-muted fs-7">Favourite property with highest saves</p>
+                                    {% else %}
+                                    <p class="text-muted">No favourites yet</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

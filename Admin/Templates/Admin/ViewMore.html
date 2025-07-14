@@ -1,0 +1,559 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}Property Details{% endblock %}
+{% block content %}
+ <style>
+.custom-delete-icon{
+    border: none;
+    outline: none;
+    background-color:#fff;
+ }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!-- Toolbar -->
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                    Property Details
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <!-- Modal Content Wrapper -->
+            <div class="modal-content rounded">
+                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                    <br><br>
+                    {% if edit %}
+                    <form method="POST" enctype="multipart/form-data" class="form">
+                        {% csrf_token %}
+                        <div class="mb-13 text-center">
+                            <h1 class="mb-3">Update Property</h1>
+                            <div class="text-muted fw-bold fs-5">Modify the details to update this property.</div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Title:</label>
+                                <input type="text" name="title" class="form-control form-control-solid"
+                                    value="{{ property.title }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Postcode:</label>
+                                <input type="text" name="postcode" class="form-control form-control-solid"
+                                    value="{{ property.postcode }}">
+                            </div>
+
+                            <div class="col-md-12 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Address:</label>
+                                <textarea name="address" class="form-control form-control-solid"
+                                    rows="3">{{ property.address }}</textarea>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Rate:</label>
+                                <input type="number" step="0.01" name="rate" class="form-control form-control-solid"
+                                    value="{{ property.rate }}">
+                            </div>
+
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Rent Type:</label>
+                                <select name="rent_type" class="form-select form-select-solid">
+                                    <option value="weekly" {% if property.rent_type == "weekly" %}selected{% endif %}>
+                                        Weekly</option>
+                                    <option value="monthly" {% if property.rent_type == "monthly" %}selected{% endif %}>
+                                        Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Bills Included:</label><br>
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <input type="checkbox" class="form-check-input" name="bills_included" {% if property.bills_included %}checked{% endif %}>
+                                    <label class="form-check-label">Yes</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Available From:</label>
+                                <input type="date" name="available_from" class="form-control form-control-solid"
+                                    value="{{ property.available_from|date:'Y-m-d' }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Available To:</label>
+                                <input type="date" name="available_to" class="form-control form-control-solid"
+                                    value="{{ property.available_to|date:'Y-m-d' }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Min Stay:</label>
+                                <select name="min_stay" id="min_stay" class="form-select form-select-solid">
+                                    {% for val, label in stay_options %}
+                                    <option value="{{ val }}" {% if property.min_stay == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Max Stay:</label>
+                                <select name="max_stay" id="max_stay" class="form-select form-select-solid">
+                                    {% for val, label in stay_options %}
+                                    <option value="{{ val }}" {% if property.max_stay == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Days Available:</label>
+                                <select name="days_available" class="form-select form-select-solid">
+                                    <option value="7days" {% if property.days_available == "7days" %}selected{% endif %}>7
+                                        days/week</option>
+                                    <option value="weekend" {% if property.days_available == "weekend" %}selected{% endif %}>Weekend only</option>
+                                    <option value="mon_fri" {% if property.days_available == "mon_fri" %}selected{% endif %}>Mon to Fri only</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Short Term Lets:</label><br>
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <input type="checkbox" class="form-check-input" name="short_term" {% if property.short_term %}checked{% endif %}>
+                                    <label class="form-check-label">Yes</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Property Type:</label>
+                                <select name="property_type" class="form-select form-select-solid">
+                                    <option value="room_in_existing" {% if property.property_type == "room_in_existing" %}selected{% endif %}>Room in existing share</option>
+                                    <option value="studio" {% if property.property_type == "studio" %}selected{% endif %}>
+                                        Studio/2 bed flats</option>
+                                    <option value="whole_property" {% if property.property_type == "whole_property" %} selected {% endif %}>Whole property</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Room Size:</label>
+                                <select name="room_size" class="form-select form-select-solid">
+                                    <option value="single" {% if property.room_size == "single" %}selected{% endif %}>
+                                        Single Room</option>
+                                    <option value="double" {% if property.room_size == "double" %}selected{% endif %}>
+                                        Double Room</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Furnishing:</label>
+                                <select name="room_furnishing" class="form-select form-select-solid">
+                                    <option value="furnished" {% if property.room_furnishing == "furnished" %}selected{% endif %}>Furnished</option>
+                                    <option value="unfurnished" {% if property.room_furnishing == "unfurnished" %}selected{% endif %}>Unfurnished</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Is En-Suite?</label><br>
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <input type="checkbox" class="form-check-input" name="is_en_suite" {% if property.is_en_suite %}checked{% endif %}>
+                                    <label class="form-check-label">Yes</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">No. of Rooms
+                                    Available:</label>
+                                <input type="number" name="no_of_rooms" class="form-control form-control-solid"
+                                    value="{{ property.no_of_rooms }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Share With Occupation</label>
+                                <select name="share_occupation" class="form-select form-select-solid">
+                                    <option value="professional" {% if property.share_occupation == "professional" %}selected{% endif %}>Professional</option>
+                                    <option value="student" {% if property.share_occupation == "student" %}selected{% endif %}>Student</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Room For</label>
+                                <select name="room_for" class="form-select form-select-solid">
+                                    <option value="male" {% if property.room_for == "male" %}selected{% endif %}>Male
+                                    </option>
+                                    <option value="female" {% if property.room_for == "female" %}selected{% endif %}>
+                                        Female</option>
+                                    <option value="couple" {% if property.room_for == "couple" %}selected{% endif %}>
+                                        Couple</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Share With Gender</label>
+                                <select name="share_gender" class="form-select form-select-solid">
+                                    <option value="male" {% if property.share_gender == "male" %}selected{% endif %}>Male
+                                    </option>
+                                    <option value="female" {% if property.share_gender == "female" %}selected{% endif %}>
+                                        Female</option>
+                                    <option value="mixed" {% if property.share_gender == "mixed" %}selected{% endif %}>
+                                        Mixed</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Current Occupant Age</label>
+                                <input type="text" name="occupant_age" class="form-control form-control-solid"
+                                    value="{{ property.occupant_age }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Household Option</label>
+                                <select name="household_option" class="form-select form-select-solid">
+                                    <option value="lgbt" {% if property.household_option == "lgbt" %}selected{% endif %}>
+                                        LGBT</option>
+                                    <option value="veg" {% if property.household_option == "veg" %}selected{% endif %}>
+                                        Vegetarian/Vegan preferred</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Total Bedrooms</label>
+                                <input type="number" name="no_of_bedrooms" class="form-control form-control-solid"
+                                    value="{{ property.no_of_bedrooms }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Property Preferences:</label>
+                                <select name="property_preference" multiple
+                                    class="form-select form-select-solid select2" id="property_preference"
+                                    data-control="select2">
+                                    <option value="pets" {% if 'pets' in property.property_preference %}selected{% endif %}>Pets Considered</option>
+                                    <option value="shared_living" {% if 'shared_living' in property.property_preference %}selected{% endif %}>Shared Living Room</option>
+                                    <option value="parking" {% if 'parking' in property.property_preference %}selected{% endif %}>Parking Available</option>
+                                    <option value="disabled" {% if 'disabled' in property.property_preference %}selected{% endif %}>Disabled Access</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                    <span class="required">Property Habit:</span>
+                                </label>
+                                <select name="property_habit" class="form-select form-select-solid">
+                                    <option value="smoking" {% if property.property_habit == "smoking" %}selected{% endif %}>Smoking</option>
+                                    <option value="non_smoking" {% if property.property_habit == "non_smoking" %}selected{% endif %}>Non-smoking</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Room Suitable for Age
+                                    Group</label>
+                                <input type="text" name="room_suitable_for" class="form-control  form-control-solid"
+                                    value="{{ property.room_suitable_for }}">
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Current Status</label>
+                                <select name="current_status" class="form-select form-select-solid">
+                                    <option value="available" {% if property.current_status == "available" %}selected{% endif %}>Available</option>
+                                    <option value="booked" {% if property.current_status == "booked" %}selected{% endif %}>Booked</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mb-8">
+                                <label class="d-flex align-items-center fs-6 fw-bold mb-2">Property Images</label>
+                                <div class="row g-3" id="existing-images">
+                                    {% for img in property.gallery_images.all %}
+                                    <div class="col-md-3 text-center image-card" id="image-card-{{ img.id }}">
+                                        <div class="border rounded p-2 shadow-sm position-relative">
+                                            <!-- Delete button -->
+                                            <button type="button"
+                                                style="font-size:large; width:25px; height: 25px; line-height: 20px;"
+                                                class="btn btn-sm btn-danger position-absolute p-0 top-0 end-0 m-1 rounded-circle"
+                                                onclick="markImageForDeletion('{{ img.id }}')">&times;</button>
+
+                                            <img src="{{ img.image.url }}" class="img-fluid rounded mb-2 image-editable"
+                                                data-img-id="{{ img.id }}" alt="Property Image"
+                                                style="height: 180px; object-fit: cover; cursor: pointer;">
+
+                                            <input type="file" name="update_image_{{ img.id }}"
+                                                class="form-control d-none img-input" accept="image/*">
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="col-12">
+                                        <p>No images uploaded yet.</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Hidden input to track deleted image IDs -->
+                                <input type="hidden" name="deleted_images" id="deleted_images">
+
+                                <!-- New Image Uploads -->
+                                <div id="image-fields" class="mt-4">
+                                    <label class="form-label fw-bold">Add New Images</label>
+                                    <input type="file" name="txt_images[]" class="form-control mb-2 img-input"
+                                        accept="image/*" multiple onchange="previewSelectedImages(event)">
+                                    <!-- Preview Container -->
+                                    <div class="row mt-2" id="preview-new-images"></div>
+
+                                </div>
+
+                                <ul id="fileList" class="list-unstyled mt-2"></ul>
+                            </div>
+
+
+                            <div class="text-center">
+                                <button type="reset" class="btn btn-light me-3">Cancel</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="indicator-label">Save Changes</span>
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                        <div class="row g-3">
+                        <h1 class="mb-4">{{ property.title }}</h1>
+                        <br><br>
+                        <div class="col-md-6"><strong>Address:</strong> {{ property.address }}</div>
+                        <div class="col-md-6"><strong>Postcode:</strong> {{ property.postcode }}</div>
+                        <div class="col-md-6"><strong>Rent:</strong>£{{ property.rate }} / {{ property.rent_type }}
+                        </div>
+                        <div class="col-md-6"><strong>Status:</strong> {{ property.get_current_status_display }}</div>
+                        <div class="col-md-6"><strong>Bills Included:</strong> {{ property.bills_included|yesno:"Yes,No" }}</div>
+                        <div class="col-md-6"><strong>Available From:</strong> {{ property.available_from }}</div>
+                        <div class="col-md-6"><strong>Available To:</strong> {{ property.available_to }}</div>
+                        <div class="col-md-6"><strong>Min Stay:</strong> {{ property.min_stay }}</div>
+                        <div class="col-md-6"><strong>Max Stay:</strong> {{ property.max_stay }}</div>
+                        <div class="col-md-6"><strong>Days Available:</strong> {{ property.days_available }}</div>
+                        <div class="col-md-6"><strong>Short Term:</strong> {{ property.short_term|yesno:"Yes,No" }}
+                        </div>
+                        <div class="col-md-6"><strong>Property Type:</strong> {{ property.get_property_type_display }}
+                        </div>
+                        <div class="col-md-6"><strong>Room Size:</strong> {{ property.get_room_size_display }}</div>
+                        <div class="col-md-6"><strong>Furnishing:</strong> {{ property.get_room_furnishing_display }}
+                        </div>
+                        <div class="col-md-6"><strong>En-suite:</strong> {{ property.is_en_suite|yesno:"Yes,No" }}</div>
+                        <div class="col-md-6"><strong>No. of Rooms:</strong> {{ property.no_of_rooms }}</div>
+                        <div class="col-md-6"><strong>Share Occupation:</strong> {{ property.get_share_occupation_display }}</div>
+                        <div class="col-md-6"><strong>Room For:</strong> {{ property.get_room_for_display }}</div>
+                        <div class="col-md-6"><strong>Share Gender:</strong> {{ property.get_share_gender_display }}
+                        </div>
+                        <div class="col-md-6"><strong>Occupant Age:</strong> {{ property.occupant_age }}</div>
+                        <div class="col-md-6"><strong>Household Option:</strong> {{ property.get_household_option_display }}</div>
+                        <div class="col-md-6"><strong>No. of Bedrooms:</strong> {{ property.no_of_bedrooms }}</div>
+                        <div class="col-md-6"><strong>Property Preferences:</strong> {{ property.property_preference }}
+                        </div>
+                        <div class="col-md-6"><strong>Property Habit:</strong> {{ property.get_property_habit_display }}
+                        </div>
+                        <div class="col-md-6"><strong>Room Suitable For:</strong> {{ property.room_suitable_for }}</div>
+                        </div>
+                        <h4 class="mt-5">Property Images</h4>
+                        <div class="row mb-4">
+                        {% for img in property.gallery_images.all %}
+                            <div class="col-md-3 mb-3">
+                            <div class="border rounded p-2">
+                                <img src="{{ img.image.url }}" class="img-fluid rounded" alt="Property Image">
+                            </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12">
+                                <p>No images available for this property.</p>
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-3 mt-4">
+                        <div class="d-flex align-items-center gap-2 mt-3">
+                        <a href="{% url 'wadmin:viewmore' property.id %}?edit=true" title="Edit Property">
+                            <span class="svg-icon svg-icon-info svg-icon-2x">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                        
+                                    <defs />
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path
+                                            d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1" />
+                                    </g>
+                                </svg>
+                            </span>&nbsp;
+                        </a>
+
+
+                            <form method="post" action="{% url 'wadmin:viewmore' property.id %}" class="d-inline"
+                                onsubmit="return confirm('Are you sure you want to delete this property?');">
+                                {% csrf_token %}
+                                <button type="submit" name="delete" class="custom-delete-icon" title="Delete Property">
+                                    <span class="svg-icon svg-icon-danger svg-icon-2x"><svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                
+                                            <defs />
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <path
+                                                    d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                    fill="#000000" opacity="0.3" />
+                                            </g>
+                                        </svg></span>&nbsp;
+                                </button>
+                            </form>
+
+                        </div>
+                        <div>
+                        <a href="{% url 'wadmin:viewproperty' %}" class="btn btn-light">Back</a>
+                        </div>
+                        
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addImageField() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.name = "txt_images";
+        input.className = "form-control form-control-solid mb-3 img-input";
+        input.style.display = "none";
+        input.accept = "image/*";
+
+        input.addEventListener("change", function () {
+            if (input.files.length > 0) {
+                document.getElementById("image-fields").appendChild(input);
+                const fileList = document.getElementById("fileList");
+                Array.from(input.files).forEach(file => {
+                    const li = document.createElement("li");
+                    li.textContent = file.name;
+                    fileList.appendChild(li);
+                });
+            }
+        });
+
+        input.click();
+    }
+
+    function attachImageEditListeners() {
+        document.querySelectorAll(".image-editable").forEach(function (img) {
+            img.addEventListener("click", function () {
+                const input = this.nextElementSibling;
+                input.click();
+                input.addEventListener("change", function () {
+                    if (input.files && input.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                });
+            });
+        });
+    }
+
+    attachImageEditListeners();
+
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select property preferences",
+            width: '100%'
+        });
+    });
+
+    const stayOptions = [
+        { value: "0", label: "Any" },
+        { value: "1", label: "1 month" },
+        { value: "2", label: "2 months" },
+        { value: "3", label: "3 months" },
+        { value: "4", label: "4 months" },
+        { value: "5", label: "5 months" },
+        { value: "6", label: "6 months" },
+        { value: "7", label: "7 months" },
+        { value: "8", label: "8 months" },
+        { value: "9", label: "9 months" },
+        { value: "10", label: "10 months" },
+        { value: "11", label: "11 months" },
+        { value: "12", label: "1 year" },
+        { value: "15", label: "1 year 3 months" },
+        { value: "18", label: "1 year 6 months" },
+        { value: "21", label: "1 year 9 months" },
+        { value: "24", label: "2 years" },
+    ];
+
+    const minSelect = document.getElementById("min_stay");
+    const maxSelect = document.getElementById("max_stay");
+
+    function populateMaxOptions(minValue) {
+        maxSelect.innerHTML = "";
+        stayOptions.forEach(option => {
+            if (Number(option.value) === 0 || Number(option.value) >= Number(minValue)) {
+                const opt = document.createElement("option");
+                opt.value = option.value;
+                opt.textContent = option.label;
+                maxSelect.appendChild(opt);
+            }
+        });
+    }
+
+    if (minSelect && maxSelect) {
+        populateMaxOptions(minSelect.value);
+        minSelect.addEventListener("change", () => {
+            populateMaxOptions(minSelect.value);
+        });
+    }
+
+    function markImageForDeletion(imageId) {
+        // Remove image preview card
+        const imageCard = document.getElementById("image-card-" + imageId);
+        imageCard.remove();
+
+        // Add image ID to hidden field for deletion
+        const deletedField = document.getElementById("deleted_images");
+        let deletedIds = deletedField.value ? deletedField.value.split(",") : [];
+        deletedIds.push(imageId);
+        deletedField.value = deletedIds.join(",");
+    }
+
+    function previewSelectedImages(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById("preview-new-images");
+        previewContainer.innerHTML = ""; // Clear previous previews
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const col = document.createElement("div");
+                col.className = "col-md-3 mb-2";
+
+                const wrapper = document.createElement("div");
+                wrapper.className = "border rounded p-2 shadow-sm";
+
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "img-fluid rounded";
+                img.style.height = "180px";
+                img.style.objectFit = "cover";
+
+                wrapper.appendChild(img);
+                col.appendChild(wrapper);
+                previewContainer.appendChild(col);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+</script>
+{% endblock %}

@@ -1,0 +1,330 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Messages - The Comfort Space</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}">
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}">
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .property-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      position: relative;
+      background-color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      justify-self:center;
+      min-width: 70%;
+    }
+    .property-card:hover {
+      background-color: #f5f5f5;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .property-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 5px;
+    }
+
+    .property-info {
+      flex-grow: 1;
+      padding-right: 15px;
+    }
+
+    .property-card h4 {
+      font-size: 1.35rem;
+      color: #343a40;
+      margin-bottom: 0;
+    }
+
+    .property-card p.text-muted {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .message-bubble {
+      margin-top: 10px;
+      padding: 10px 15px;
+      
+      color: white;
+      max-width: 80%;
+      display: inline-block;
+      word-wrap: break-word;
+    }
+
+    .admin-message {
+      background-color: #5f92c9da;
+      border-radius: 0 20px 20px 20px;
+    }
+
+    .user-message {
+      background-color: #6c757d;
+      border-radius:20px 0 20px 20px;
+    }
+
+    .message-container {
+      clear: both;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .admin-message-container {
+      justify-content: flex-start;
+    }
+
+    .user-message-container {
+      justify-content: flex-end;
+    }
+
+    .green-dot {
+      background-color: #28a745;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .admin-message-container .green-dot {
+      margin-left: 5px;
+      order: 2;
+    }
+
+    .message-tick {
+      font-size: 12px;
+      line-height: 1;
+      margin-left: 5px;
+    }
+
+    .single-gray-tick {
+      color: #cccccc;
+    }
+
+    .double-blue-tick {
+      color: #007bff;
+    }
+
+    .timestamp {
+      font-size: 0.8em;
+      color: #888;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .admin-message-container + .timestamp {
+      text-align: left;
+    }
+
+    .user-message-container + .timestamp {
+      text-align: right;
+    }
+
+    .view-link {
+      font-size: 0.9rem;
+      color: #007bff;
+      text-decoration: none;
+      flex-shrink: 0;
+      align-self: center;
+      padding-left: 10px;
+    }
+    .view-link:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+ <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li class="active"><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li><a href="{%  url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+            <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
+            <span class="icon-sign-out"></span></a></li>
+          </ul>
+
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<!-- HERO SECTION -->
+<div class="hero page-inner overlay" style="background-image: url(&quot;{% static 'Usertemplate/images/hero_bg_1.jpg' %}&quot;)">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">My Messages</h1>
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">Messages</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE LIST -->
+<div class="section container">
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="property-card" data-href="{% url 'wuser:messageuser' msg.property.id %}">
+        <div class="property-header">
+          <div class="property-info">
+            <h4 class="mb-0">{{ msg.property.title }}</h4>
+            <p class="text-muted">{{ msg.property.address }}</p>
+          </div>
+          <a class="view-link" href="{% url 'wuser:viewdetails' msg.property.id %}" onclick="event.stopPropagation();">View Property</a>
+        </div>
+
+        <div class="message-container {% if msg.is_from_admin %}admin-message-container{% else %}user-message-container{% endif %}">
+          <div class="message-bubble {% if msg.is_from_admin %}admin-message{% else %}user-message{% endif %}">
+            {{ msg.body }}
+          </div>
+
+          {% if msg.is_from_admin and not msg.is_read %}
+            <div class="green-dot"></div>
+          {% elif not msg.is_from_admin %}
+            {% if msg.is_read %}
+              <span class="message-tick double-blue-tick">&#10003;&#10003;</span>
+            {% else %}
+              <span class="message-tick single-gray-tick">&#10003;</span>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <div class="timestamp {{ msg.is_from_admin|yesno:'admin-message-container,user-message-container' }}">
+          {{ msg.created_at|date:"M d, Y P" }}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-center text-muted">No messages found.</p>
+  {% endif %}
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li>
+                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="widget">
+          <h3>Links</h3>
+          <ul class="list-unstyled links">
+            <li><a href="#">Our Vision</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+          <ul class="list-unstyled social">
+            <li>
+              <a href="#"><span class="icon-instagram"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-twitter"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-facebook"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-linkedin"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-pinterest"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-dribbble"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All Rights Reserved. &mdash; Designed with love by
+          <a href="#">Bi.Enterprise</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+<script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+<script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+<script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+<script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+<script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.property-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        window.location.href = this.getAttribute('data-href');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

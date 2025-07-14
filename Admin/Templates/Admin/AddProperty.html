@@ -1,0 +1,428 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}Add New Property{% endblock %}
+{% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Add New Property
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+
+            <div class="modal-content rounded">
+                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                    <br><br>
+                    <form method="POST" enctype="multipart/form-data" class="form">
+                        {% csrf_token %}
+                        <div class="mb-13 text-center">
+                            <h1 class="mb-3">Add New Property</h1>
+                            <div class="text-muted fw-bold fs-5">Fill in the details to add a new property.</div>
+                        </div>
+
+                       <div class="row g-3">
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Title:</span>
+        </label>
+        <input type="text" name="title" class="form-control form-control-solid" placeholder="Enter property title" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Postcode:</span>
+        </label>
+        <input type="text" name="postcode" class="form-control form-control-solid" placeholder="Enter postcode" pattern="[A-Za-z0-9\s\-]{3,10}" required>
+    </div>
+
+    <div class="col-md-12 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Address:</span>
+        </label>
+        <textarea name="address" class="form-control form-control-solid" rows="3" placeholder="Enter full address" required></textarea>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Rate:</span>
+        </label>
+        <input type="number" step="0.01" name="rate" class="form-control form-control-solid" placeholder="Enter rate" min="0" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Rent Type:</span>
+        </label>
+        <select name="rent_type" class="form-select form-select-solid" required>
+            <option value="">Select rent type</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Bills Included:</span>
+        </label>
+        <div class="form-check form-check-custom form-check-solid">
+            <input type="checkbox" name="bills_included" class="form-check-input">
+            <label class="form-check-label">Yes</label>
+        </div>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Available From:</span>
+        </label>
+        <input type="date" name="available_from" class="form-control form-control-solid" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Available To:</span>
+        </label>
+        <input type="date" name="available_to" class="form-control form-control-solid" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label for="min_stay" class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Min Stay:</span>
+        </label>
+        <select name="min_stay" id="min_stay" class="form-select form-select-solid" required>
+            <option value="">Select min stay</option>
+            <option value="0">Any</option>
+            <option value="1">1 month</option>
+            <option value="2">2 months</option>
+            <option value="3">3 months</option>
+            <option value="4">4 months</option>
+            <option value="5">5 months</option>
+            <option value="6">6 months</option>
+            <option value="7">7 months</option>
+            <option value="8">8 months</option>
+            <option value="9">9 months</option>
+            <option value="10">10 months</option>
+            <option value="11">11 months</option>
+            <option value="12">1 year</option>
+            <option value="15">1 year 3 months</option>
+            <option value="18">1 year 6 months</option>
+            <option value="21">1 year 9 months</option>
+            <option value="24">2 years</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label for="max_stay" class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Max Stay:</span>
+        </label>
+        <select name="max_stay" id="max_stay" class="form-select form-select-solid" required>
+            <option value="">Select max stay</option>
+            <!-- same options as above -->
+            <option value="0">Any</option>
+            <option value="1">1 month</option>
+            <option value="2">2 months</option>
+            <option value="3">3 months</option>
+            <option value="4">4 months</option>
+            <option value="5">5 months</option>
+            <option value="6">6 months</option>
+            <option value="7">7 months</option>
+            <option value="8">8 months</option>
+            <option value="9">9 months</option>
+            <option value="10">10 months</option>
+            <option value="11">11 months</option>
+            <option value="12">1 year</option>
+            <option value="15">1 year 3 months</option>
+            <option value="18">1 year 6 months</option>
+            <option value="21">1 year 9 months</option>
+            <option value="24">2 years</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Days Available:</span>
+        </label>
+        <select name="days_available" class="form-select form-select-solid" required>
+            <option value="">Select availability</option>
+            <option value="7days">7 days/week</option>
+            <option value="weekend">Weekend only</option>
+            <option value="mon_fri">Mon to Fri only</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Short Term Lets:</span>
+        </label>
+        <div class="form-check form-check-custom form-check-solid">
+            <input type="checkbox" name="short_term" class="form-check-input">
+            <label class="form-check-label">Yes</label>
+        </div>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Property Type:</span>
+        </label>
+        <select name="property_type" class="form-select form-select-solid" required>
+            <option value="">Select type</option>
+            <option value="room_in_existing">Room in existing share</option>
+            <option value="studio">Studio/2 bed flats</option>
+            <option value="whole_property">Whole property</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Room Size:</span>
+        </label>
+        <select name="room_size" class="form-select form-select-solid" required>
+            <option value="">Select room size</option>
+            <option value="single">Single Room</option>
+            <option value="double">Double Room</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Furnishing:</span>
+        </label>
+        <select name="room_furnishing" class="form-select form-select-solid" required>
+            <option value="">Select furnishing</option>
+            <option value="furnished">Furnished</option>
+            <option value="unfurnished">Unfurnished</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Is En-Suite?</span>
+        </label>
+        <div class="form-check form-check-custom form-check-solid">
+            <input type="checkbox" name="is_en_suite" class="form-check-input">
+            <label class="form-check-label">Yes</label>
+        </div>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">No. of Rooms Available:</span>
+        </label>
+        <input type="number" name="no_of_rooms" class="form-control form-control-solid" min="1" placeholder="Enter no. of rooms" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Share With Occupation:</span>
+        </label>
+        <select name="share_occupation" class="form-select form-select-solid" required>
+            <option value="">Select occupation</option>
+            <option value="professional">Professional</option>
+            <option value="student">Student</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Room For:</span>
+        </label>
+        <select name="room_for" class="form-select form-select-solid" required>
+            <option value="">Select target</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="couple">Couple</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Share With Gender:</span>
+        </label>
+        <select name="share_gender" class="form-select form-select-solid" required>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="mixed">Mixed</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Current Occupant Age:</span>
+        </label>
+        <input type="text" name="occupant_age" class="form-control form-control-solid" placeholder="e.g. 20-30">
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Household Option:</span>
+        </label>
+        <select name="household_option" class="form-select form-select-solid">
+            <option value="">Select preference</option>
+            <option value="lgbt">LGBT</option>
+            <option value="veg">Vegetarian/Vegan preferred</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Total Bedrooms:</span>
+        </label>
+        <input type="number" name="no_of_bedrooms" class="form-control form-control-solid" min="1" placeholder="Enter total bedrooms" required>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Property Preference:</span>
+        </label>
+        <select name="property_preference" multiple class="form-select form-select-solid select2" id="property_preference" data-control="select2" data-placeholder="Select property preferences">
+            <option value="pets">Pets Considered</option>
+            <option value="shared_living">Shared Living Room</option>
+            <option value="parking">Parking Available</option>
+            <option value="disabled">Disabled Access</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Property Habit:</span>
+        </label>
+        <select name="property_habit" class="form-select form-select-solid" required>
+            <option value="">Select habit</option>
+            <option value="smoking">Smoking</option>
+            <option value="non_smoking">Non-smoking</option>
+        </select>
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span>Room Suitable for Age Group:</span>
+        </label>
+        <input type="text" name="room_suitable_for" class="form-control form-control-solid" placeholder="e.g. 18-35">
+    </div>
+
+    <div class="col-md-6 d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Current Status:</span>
+        </label>
+        <select name="current_status" class="form-select form-select-solid" required>
+            <option value="">Select status</option>
+            <option value="available">Available</option>
+            <option value="booked">Booked</option>
+        </select>
+    </div>
+
+    <div class="d-flex flex-column mb-8 fv-row">
+        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+            <span class="required">Add Images</span>
+        </label>
+        <div id="image-fields">
+            <input type="file" name="txt_images" class="form-control form-control-solid mb-3 img-input" required multiple accept="image/*">
+        </div>
+        <button type="button" onclick="addImageField()" class="btn btn-light-primary btn-sm mt-2">+ Add More Images</button>
+        <ul id="fileList" class="list-unstyled mt-2"></ul>
+    </div>
+</div>
+
+<div class="text-center">
+    <button type="reset" class="btn btn-light me-3">Cancel</button>
+    <button type="submit" class="btn btn-primary">
+        <span class="indicator-label">Add Property</span>
+        <span class="indicator-progress">Please wait...
+            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+        </span>
+    </button>
+</div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select property preferences",
+            width: '100%'
+        });
+    });
+
+    const stayOptions = [
+      { value: "0", label: "Any" },
+      { value: "1", label: "1 month" },
+      { value: "2", label: "2 months" },
+      { value: "3", label: "3 months" },
+      { value: "4", label: "4 months" },
+      { value: "5", label: "5 months" },
+      { value: "6", label: "6 months" },
+      { value: "7", label: "7 months" },
+      { value: "8", label: "8 months" },
+      { value: "9", label: "9 months" },
+      { value: "10", label: "10 months" },
+      { value: "11", label: "11 months" },
+      { value: "12", label: "1 year" },
+      { value: "15", label: "1 year 3 months" },
+      { value: "18", label: "1 year 6 months" },
+      { value: "21", label: "1 year 9 months" },
+      { value: "24", label: "2 years" },
+    ];
+
+    const minSelect = document.getElementById("min_stay");
+    const maxSelect = document.getElementById("max_stay");
+
+    function populateMaxOptions(minValue) {
+      maxSelect.innerHTML = ""; // Clear options
+      stayOptions.forEach(option => {
+        if (Number(option.value) === 0 || Number(option.value) >= Number(minValue)) {
+          const opt = document.createElement("option");
+          opt.value = option.value;
+          opt.textContent = option.label;
+          maxSelect.appendChild(opt);
+        }
+      });
+    }
+
+    // Initial population
+    populateMaxOptions(0);
+
+    // Change event
+    minSelect.addEventListener("change", () => {
+      const selectedMin = minSelect.value;
+      populateMaxOptions(selectedMin);
+    });
+
+    function addImageField() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.name = "txt_images";
+        input.className = "form-control form-control-solid mb-3 img-input";
+        input.style.display = "none"; // Hide the actual file input
+
+        input.addEventListener("change", function () {
+            if (input.files.length > 0) {
+                // Append the hidden input to the container
+                document.getElementById("image-fields").appendChild(input);
+
+                const fileList = document.getElementById("fileList");
+                Array.from(input.files).forEach(file => {
+                    const li = document.createElement("li");
+                    li.textContent = file.name;
+                    fileList.appendChild(li);
+                });
+            }
+        });
+
+        input.click(); // Programmatically click the hidden input to open file dialog
+    }
+</script>
+{% endblock %}

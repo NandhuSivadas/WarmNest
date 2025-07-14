@@ -1,0 +1,97 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}Replied Messages{% endblock %}
+
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="toolbar" id="kt_toolbar">
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                    Replied Messages
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+                    <div class="card-title">
+                        <h2 class="text-success">Replied User Messages</h2>
+                    </div>
+                </div>
+
+                <div class="card-body pt-0">
+                    <!-- Search Form -->
+                    <form method="get" class="mb-4">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-4">
+                                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by Sender Name">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="property" value="{{ property_query }}" class="form-control" placeholder="Search by Property">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <a href="{% url 'wadmin:repliedmessages' %}" class="btn btn-secondary">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Messages Table -->
+                    <div class="table-responsive">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5">
+                            <thead>
+                                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                    <th>Sl No</th>
+                                    <th>Sender</th>
+                                    <th>Property</th>
+                                    <th>Message Snippet</th>
+                                    <th>Replied At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 fw-bold">
+                                {% for msg in messages %}
+                                <tr style="cursor: pointer;" onclick="window.location.href='{% url 'wadmin:messagereply' msg.sender.id msg.property.id %}'">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ msg.sender.user_firstname }}</td>
+                                    <td>{{ msg.property.title|default:"N/A" }}</td>
+                                    <td>{{ msg.body|truncatechars:60 }}</td>
+                                    <td>{{ msg.created_at|date:"d M Y, h:i A" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No replied messages found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if messages.has_other_pages %}
+                    <div class="d-flex justify-content-center mt-5">
+                        {% if messages.has_previous %}
+                        <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if property_query %}&property={{ property_query }}{% endif %}" class="btn btn-light-primary btn-sm me-2">First</a>
+                        <a href="?page={{ messages.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if property_query %}&property={{ property_query }}{% endif %}" class="btn btn-light-primary btn-sm me-2">Previous</a>
+                        {% endif %}
+
+                        <span class="align-self-center mx-2 text-muted fw-bold">
+                            Page {{ messages.number }} of {{ messages.paginator.num_pages }}
+                        </span>
+
+                        {% if messages.has_next %}
+                        <a href="?page={{ messages.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if property_query %}&property={{ property_query }}{% endif %}" class="btn btn-light-primary btn-sm ms-2">Next</a>
+                        <a href="?page={{ messages.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if property_query %}&property={{ property_query }}{% endif %}" class="btn btn-light-primary btn-sm ms-2">Last</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

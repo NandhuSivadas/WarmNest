@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="{% static 'UserTemplate/favicon.png' %}" />
+  <meta name="description" content="Chat with Admin for Property Inquiries" />
+  <meta name="keywords" content="property, chat, admin, support" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+  <title>Chat — The Comfort Space</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .chat-messages {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .chat-messages .mb-3 {
+      padding: 10px 15px;
+      border-radius: 25px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .text-end {
+      margin-left: auto;
+    }
+
+    .text-start {
+      margin-right: auto;
+    }
+
+    .user-msg {
+      padding: 12px 16px;
+      border-radius: 20px 0 20px 20px;
+      background-color: #6c757dda;
+      color: #fff;
+      max-width: 75%;
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+
+    .admin-msg {
+      padding: 12px 16px;
+      border-radius: 0 20px 20px 20px;
+      background-color: #5f92c9da;
+      color: #fff;
+      max-width: 75%;
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li class="active"><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li><a href="{%  url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+            <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
+                <span class="icon-sign-out"></span></a></li>
+          </ul>
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <div class="hero page-inner overlay"
+    style="background-image: url(&quot;{% static 'Usertemplate/images/hero_bg_1.jpg' %}&quot;)">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">Chat</h1>
+          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+            <ol class="breadcrumb text-center justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+              <li class="breadcrumb-item active text-white-50" aria-current="page">Chat</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT SECTION -->
+  <div class="section pt-5 container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+        <div class="box-feature p-4">
+          <div class="container my-5">
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-primary text-white fw-bold">
+                Chat - <span>{{ property.title }}</span>
+                <input type="hidden" id="property-display" value="{{ property.id }}" />
+              </div>
+
+              <div id="connection-status" class="text-center py-2 small bg-light text-muted">
+                Connecting...
+              </div>
+
+              <div id="chat-box" class="p-3" style="max-height: 400px; overflow-y: auto;"></div>
+
+              <div id="typing-indicator" class="px-3 py-1 fst-italic text-muted small" style="display: none;">
+                Admin is typing...
+              </div>
+
+              <div class="card-footer bg-white border-top-0">
+                <div class="input-group">
+                  <input type="text" id="chat_input" class="form-control rounded-pill me-2"
+                    placeholder="Type your message..." maxlength="500">
+                  <button id="send-btn" onclick="sendMessage()" class="btn btn-primary rounded-pill px-4"
+                    disabled>Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+<div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li>
+                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="widget">
+          <h3>Links</h3>
+          <ul class="list-unstyled links">
+            <li><a href="#">Our Vision</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+          <ul class="list-unstyled social">
+            <li>
+              <a href="#"><span class="icon-instagram"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-twitter"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-facebook"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-linkedin"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-pinterest"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-dribbble"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All Rights Reserved. &mdash; Designed with love by
+          <a href="#">Bi.Enterprise</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+  <script>
+    const box = document.querySelector('.chat-messages');
+    if (box) box.scrollTop = box.scrollHeight;
+  </script>
+  <script>
+    const user_id = "{{ user_id }}";
+    const property_id = "{{ property_id }}";
+    const role = "{{ role }}"; // This will be 'user' from the view
+    const chatBox = document.getElementById('chat-box');
+    const connectionStatus = document.getElementById('connection-status');
+    const sendBtn = document.getElementById('send-btn');
+    const chatInput = document.getElementById('chat_input');
+
+    // Update property display
+    document.getElementById('property-display').value = property_id;
+
+    // WebSocket connection
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new WebSocket(
+      protocol + '//' + window.location.host + '/ws/chat/' + user_id + '/' + property_id + '/'
+    );
+
+    socket.onopen = function (e) {
+      console.log('WebSocket connection established');
+      connectionStatus.textContent = 'Connected';
+      connectionStatus.className = 'connection-status status-connected';
+      sendBtn.disabled = false;
+
+      // Load message history
+      socket.send(JSON.stringify({ type: "load_history" }));
+
+      // Mark messages as read if admin
+      if (role === 'admin') {
+        socket.send(JSON.stringify({ type: "mark_read" }));
+      }
+    };
+
+    socket.onmessage = function (e) {
+      try {
+        const data = JSON.parse(e.data);
+        console.log('Received message:', data);
+
+        if (data.type === "chat_history") {
+          // Clear existing messages
+          chatBox.innerHTML = '';
+          data.messages.forEach(msg => {
+            appendMessage(msg.message, msg.sender, msg.timestamp);
+          });
+        } else if (data.message) {
+          appendMessage(data.message, data.sender, data.timestamp);
+          // If role is user and message is from admin, mark it as read
+          if (role === 'user' && data.sender === 'admin') {
+            socket.send(JSON.stringify({
+              type: "mark_message_read",
+              message_id: data.message_id
+            }));
+          }
+        } else if (data.error) {
+          showError(data.error);
+        }
+      } catch (error) {
+        console.error('Error parsing message:', error);
+        showError('Error parsing server response');
+      }
+    };
+
+    socket.onclose = function (e) {
+      console.log('WebSocket connection closed');
+      connectionStatus.textContent = 'Disconnected';
+      connectionStatus.className = 'connection-status status-disconnected';
+      sendBtn.disabled = true;
+
+      // Try to reconnect after 3 seconds
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
+    };
+
+    socket.onerror = function (e) {
+      console.error('WebSocket error:', e);
+      showError('Connection error. Please refresh the page.');
+    };
+
+    function appendMessage(message, sender, timestamp) {
+      // Create wrapper div for alignment and margin
+      const wrapperDiv = document.createElement('div');
+      wrapperDiv.classList.add('d-flex', 'mb-3');
+      if (sender === "admin") {
+        wrapperDiv.classList.add('justify-content-start');
+      } else {
+        wrapperDiv.classList.add('justify-content-end');
+      }
+
+      // Create message bubble
+      const msgDiv = document.createElement('div');
+      if (sender === "admin") {
+        msgDiv.classList.add('admin-msg');
+      } else {
+        msgDiv.classList.add('user-msg');
+      }
+
+      // Message text
+      const messageContent = document.createElement('p');
+      messageContent.classList.add('mb-1');
+      messageContent.textContent = message;
+      msgDiv.appendChild(messageContent);
+
+      // Timestamp
+      if (timestamp) {
+        const timeDiv = document.createElement('small');
+        const date = new Date(timestamp);
+        timeDiv.textContent = date.toLocaleTimeString();
+        msgDiv.appendChild(timeDiv);
+      }
+
+      // Append bubble to wrapper
+      wrapperDiv.appendChild(msgDiv);
+
+      // Append to chat box
+      chatBox.appendChild(wrapperDiv);
+
+      // Auto-scroll
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (message && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          message: message,
+          sender: role
+        }));
+        chatInput.value = "";
+      }
+    }
+
+    function showError(errorMessage) {
+      const errorDiv = document.createElement('div');
+      errorDiv.classList.add('error-message');
+      errorDiv.textContent = errorMessage;
+      chatBox.appendChild(errorDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Enable sending message with Enter key
+    chatInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Character counter
+    chatInput.addEventListener('input', function () {
+      const remaining = 500 - this.value.length;
+      if (remaining < 50) {
+        this.style.borderColor = remaining < 0 ? '#dc3545' : '#ffc107';
+      } else {
+        this.style.borderColor = '#ddd';
+      }
+    });
+  </script>
+</body>
+
+</html>

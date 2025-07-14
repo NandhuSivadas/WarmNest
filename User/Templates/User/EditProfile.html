@@ -1,0 +1,325 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="{% static 'UserTemplate/favicon.png' %}" />
+  <meta name="description" content="Profile Update Page" />
+  <meta name="keywords" content="profile, update, account" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+  <title>Update Profile — The Comfort Space</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .form-control {
+      margin-bottom: 1rem;
+    }
+    .form-group h5 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .phone-input-group {
+      display: flex;
+      width: 100%;
+      background-color: white;
+      border-radius: 4px; /* Match form-control border-radius */
+      overflow: hidden;
+      border: 1px solid #ced4da; /* Match form-control border */
+    }
+    .phone-input-group span {
+      padding: 10px 6px 10px 14px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      background: none;
+      border-right: none;
+      color: #495057; /* Match form-control text color */
+    }
+    .phone-input-group input[name="country_code"] {
+      width: 40px;
+      padding: 10px 6px 10px 0px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      text-align: center;
+      outline: none;
+      margin-left: -2px;
+      color: #495057;
+    }
+    .phone-input-group .separator {
+      width: 1px;
+      background-color: #ced4da;
+    }
+    .phone-input-group input[name="txt_contact"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      outline: none;
+      color: #495057;
+    }
+    .phone-input-group input:focus {
+      box-shadow: none; /* Prevent double shadow with form-control */
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li class="active"><a href="{% url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+           <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
+            <span class="icon-sign-out"></span></a></li>
+          </ul>
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <div class="hero page-inner overlay" style="background-image: url('{% static 'Usertemplate/images/hero_bg_1.jpg' %}')">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">Update Profile</h1>
+          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+            <ol class="breadcrumb text-center justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'wuser:myprofile' %}">My Profile</a></li>
+              <li class="breadcrumb-item active text-white-50" aria-current="page">Update Profile</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE UPDATE SECTION -->
+  <div class="section pt-5 container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+        <div class="box-feature p-4">
+          <form method="post" id="updateProfileForm">
+            {% csrf_token %}
+            <div class="row mb-4">
+              <div class="col-md-6 mb-4">
+                <div class="form-group">
+                  <h5 class="text-primary">First Name</h5>
+                  <input type="text" class="form-control" name="txt_firstname" value="{{ user.user_firstname }}"
+                         required pattern="[A-Za-z ]+" title="Only alphabets and spaces allowed">
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="form-group">
+                  <h5 class="text-primary">Last Name</h5>
+                  <input type="text" class="form-control" name="txt_lastname" value="{{ user.user_lastname }}"
+                         required pattern="[A-Za-z ]+" title="Only alphabets and spaces allowed">
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6 mb-4">
+                <div class="form-group">
+                  <h5 class="text-primary">Contact</h5>
+                  <div class="phone-input-group">
+                    <span>+</span>
+                    <input type="text" name="country_code" value="{{country_code}}" maxlength="2" pattern="[0-9]{1,2}"
+                           title="Please enter a valid country code" required>
+                    <div class="separator"></div>
+                    <input type="tel" name="txt_contact" maxlength="10"
+                           value="{{ contact_number }}"
+                           pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="form-group">
+                  <h5 class="text-primary">Email</h5>
+                  <input type="email" class="form-control" name="txt_email" value="{{ user.user_email }}" readonly>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6 mb-4">
+                <div class="form-group">
+                  <h5 class="text-primary">Gender</h5>
+                  <select class="form-control" name="txt_gender" required>
+                    <option value="M" {% if user.user_gender == "M" %}selected{% endif %}>Male</option>
+                    <option value="F" {% if user.user_gender == "F" %}selected{% endif %}>Female</option>
+                    <option value="O" {% if user.user_gender == "O" %}selected{% endif %}>Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hidden full phone number -->
+            <input type="hidden" name="full_phone" id="full_phone" />
+
+            <div class="text-center mt-5 pt-4 border-top">
+              <button type="submit" class="btn btn-primary py-2 px-4 me-3">Update Profile</button>
+              <a href="{% url 'wuser:myprofile' %}" class="btn btn-outline-primary py-2 px-4">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FOOTER -->
+<div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li>
+                <a href="mailto:info@mydomain.com">info@mydomain.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+        <div class="widget">
+          <h3>Links</h3>
+          <ul class="list-unstyled links">
+            <li><a href="#">Our Vision</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+          <ul class="list-unstyled social">
+            <li>
+              <a href="#"><span class="icon-instagram"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-twitter"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-facebook"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-linkedin"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-pinterest"></span></a>
+            </li>
+            <li>
+              <a href="#"><span class="icon-dribbble"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>
+          Copyright &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All Rights Reserved. &mdash; Designed with love by
+          <a href="#">Bi.Enterprise</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const updateProfileForm = document.getElementById('updateProfileForm');
+
+      updateProfileForm.addEventListener('submit', function (e) {
+        const fname = updateProfileForm.querySelector('input[name="txt_firstname"]');
+        const lname = updateProfileForm.querySelector('input[name="txt_lastname"]');
+        const contact = updateProfileForm.querySelector('input[name="txt_contact"]');
+        const countryCode = updateProfileForm.querySelector('input[name="country_code"]');
+        const fullPhone = updateProfileForm.querySelector('input[name="full_phone"]');
+
+        const nameRegex = /^[A-Za-z ]+$/;
+        const phoneRegex = /^[0-9]{10}$/;
+        const countryCodeRegex = /^[0-9]{1,2}$/;
+
+        if (!nameRegex.test(fname.value.trim())) {
+          alert("First Name must contain only alphabets and spaces.");
+          fname.focus();
+          e.preventDefault();
+          return;
+        }
+
+        if (!nameRegex.test(lname.value.trim())) {
+          alert("Last Name must contain only alphabets and spaces.");
+          lname.focus();
+          e.preventDefault();
+          return;
+        }
+
+        if (!countryCodeRegex.test(countryCode.value.trim())) {
+          alert("Please enter a valid country code (1-2 digits).");
+          countryCode.focus();
+          e.preventDefault();
+          return;
+        }
+
+        if (!phoneRegex.test(contact.value.trim())) {
+          alert("Please enter a valid 10-digit phone number.");
+          contact.focus();
+          e.preventDefault();
+          return;
+        }
+
+        // Combine into full_phone (e.g., +441234567890)
+        fullPhone.value = "+" + countryCode.value.trim() + contact.value.trim();
+      });
+    });
+  </script>
+</body>
+</html>

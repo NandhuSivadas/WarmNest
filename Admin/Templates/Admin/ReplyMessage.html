@@ -1,0 +1,126 @@
+{% extends 'Admin/NavBar.html' %}
+{% block title %}Chats{% endblock %}
+{% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+  <div class="toolbar" id="kt_toolbar">
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+      <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Chats
+          <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+          <small class="text-muted fs-7 fw-bold my-1 ms-1">Admin</small>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="post d-flex flex-column-fluid" id="kt_post">
+    <div id="kt_content_container" class="container-xxl">
+      <div class="card w-100 rounded-0" id="kt_drawer_chat_messenger">
+
+        <!-- Header -->
+        <div class="card-header pe-5">
+          <div class="card-title">
+            <div class="d-flex justify-content-center flex-column me-3">
+              <span class="fs-4 fw-bolder text-gray-900 lh-1">{{ property.title }} : Chat with {{ user.user_firstname }} </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="card-body" id="kt_drawer_chat_messenger_body">
+          <div class="scroll-y me-n5 pe-5" id="chat-box" style="max-height: 500px; overflow-y:auto"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer pt-4">
+          <div class="d-flex flex-stack">
+            <input type="text" id="chat_input" class="form-control form-control-flush mb-3" placeholder="Type a message" required>
+            <button type="button" class="btn btn-primary ms-3" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const user_id = "{{ user.id }}";
+  const property_id = "{{ property.id }}";
+  const role = "admin";
+
+  const chatSocket = new WebSocket(
+    'ws://' + window.location.host + '/ws/chat/' + user_id + '/' + property_id + '/'
+  );
+
+  const chatBox = document.getElementById('chat-box');
+
+  chatSocket.onopen = function () {
+    chatSocket.send(JSON.stringify({ type: "load_history" }));
+  };
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+     
+    if (data.type === "chat_history") {
+    data.messages.forEach(msg => {
+      appendMessage(msg.sender, msg.message);
+
+      // If it's a user message, mark it read
+      if (role === 'admin' && msg.sender === 'user') {
+        chatSocket.send(JSON.stringify({
+          type: "mark_message_read",
+          message_id: msg.message_id
+        }));
+      }
+    });
+  } 
+  else if (data.message) {
+    appendMessage(data.sender, data.message);
+
+    // If it's a user message, mark it read immediately
+    if (role === 'admin' && data.sender === 'user') {
+      chatSocket.send(JSON.stringify({
+        type: "mark_message_read",
+        message_id: data.message_id
+      }));
+    }
+  }
+  };
+
+  function appendMessage(sender, message) {
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add('d-flex', 'mb-5', sender === 'admin' ? 'justify-content-end' : 'justify-content-start');
+
+  const innerDiv = document.createElement('div');
+  innerDiv.classList.add('p-3', 'rounded', 'fw-bold', 'text-dark');
+
+  if (sender === 'admin') {
+    innerDiv.classList.add('bg-light-primary', 'text-end');
+  } else {
+    innerDiv.classList.add('bg-light-info', 'text-start');
+  }
+
+  innerDiv.textContent = message;
+
+  msgDiv.appendChild(innerDiv);
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+  function sendMessage() {
+    const input = document.getElementById("chat_input");
+    const message = input.value.trim();
+    if (message) {
+      chatSocket.send(JSON.stringify({
+        message: message,
+        sender: role
+      }));
+      input.value = "";
+    }
+  }
+</script>
+
+{% endblock %}
