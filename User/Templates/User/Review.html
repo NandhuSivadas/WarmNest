@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Write a Review - {{ property.title }}</title>
+
+  <!-- Fonts and CSS -->
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/icomoon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/fonts/flaticon/font/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
+  <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="{% url 'wuser:userhomepage' %}" class="logo m-0 float-start">The Comfort Space</a>
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+            <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
+            <li><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
+            <li><a href="{% url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
+            <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}"><span class="icon-sign-out"></span></a></li>
+          </ul>
+          <a href="#" class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero page-inner overlay"
+    style="background-image: url(&quot;{% static 'Usertemplate/images/hero_bg_1.jpg' %}&quot;)">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">{{ property.title }}</h1>
+          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+            <ol class="breadcrumb text-center justify-content-center">
+              <li class="breadcrumb-item"><a href="{% url 'wuser:userhomepage' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'wuser:viewproperty' %}">Properties</a></li>
+              <li class="breadcrumb-item active text-white-50" aria-current="page">{{ property.title }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Review Form -->
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm rounded-4 p-4 border-0">
+          <h2 class="mb-4">Leave a Review for <strong>{{ property.title }}</strong></h2>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="review" class="form-label">Your Review</label>
+              <textarea name="review" id="review" class="form-control" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+            <a href="{% url 'wuser:viewdetails' property.id %}" class="btn btn-outline-secondary ms-2">Back to Property</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Contact</h3>
+            <address>43 Raymouth Rd. Baltemoer, London 3910</address>
+            <ul class="list-unstyled links">
+              <li><a href="tel://11234567890">+1(123)-456-7890</a></li>
+              <li><a href="mailto:info@mydomain.com">info@mydomain.com</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="widget">
+            <h3>Links</h3>
+            <ul class="list-unstyled links">
+              <li><a href="#">Our Vision</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Contact us</a></li>
+            </ul>
+            <ul class="list-unstyled social">
+              <li><a href="#"><span class="icon-instagram"></span></a></li>
+              <li><a href="#"><span class="icon-twitter"></span></a></li>
+              <li><a href="#"><span class="icon-facebook"></span></a></li>
+              <li><a href="#"><span class="icon-linkedin"></span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <p>
+            &copy; <script>document.write(new Date().getFullYear());</script> The Comfort Space. All rights reserved.
+            Designed by <a href="#">Bi.Enterprise</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="{% static 'UserTemplate/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/tiny-slider.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/aos.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/navbar.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/counter.js' %}"></script>
+  <script src="{% static 'UserTemplate/js/custom.js' %}"></script>
+</body>
+
+</html>

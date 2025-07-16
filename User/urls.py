@@ -15,4 +15,5 @@ urlpatterns= [
     path('user_logout/',views.user_logout,name='user_logout'),
     path('messageuser/<int:property_id>/', views.messageuser, name='messageuser'),
     path('logoutconfirmation/',views.logout_confirm,name='logout_confirm'),
+    path('review/<int:property_id>/',views.user_review,name='user_review'),
 ]

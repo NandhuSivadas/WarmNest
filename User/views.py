@@ -11,6 +11,7 @@ import traceback
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import check_password, make_password
+from User.models import*
 
 def userhomepage(request):
     if not request.session.get('uid'):
@@ -320,3 +321,26 @@ def logout_confirm(request):
         # GET: render the page
         next_url = request.GET.get("next", "")
         return render(request,'User/LogoutConfirmation.html',{"next": next_url})
+
+def user_review(request,property_id):
+    if not request.session.get('uid'):
+        return redirect('wguest:login')
+    user_id = request.session.get('uid')
+    user = get_object_or_404(tbl_newuser, id=user_id)
+    property=get_object_or_404(tbl_property,id=property_id)
+    if request.method == 'POST':
+        review_text = request.POST.get('review')
+        if review_text:
+            tbl_review.objects.create(
+                review=review_text,
+                user=user,
+                property=property,
+            )
+            return redirect('wuser:viewdetails', property_id)  # Redirect to property detail page
+
+    return render(request, 'User/Review.html', {
+        'property': property,
+    })
+
+
+
