@@ -13,6 +13,15 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import check_password, make_password
 from User.models import*
 
+
+
+#Machine learning model required libraries
+import pandas as pd
+from sklearn.neighbors import NearestNeighbors
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+
 def userhomepage(request):
     if not request.session.get('uid'):
         return redirect('wguest:login')
@@ -134,6 +143,46 @@ def messageuser(request, property_id=None):
     # Important: render to 'MessageUser.html'
     return render(request, "User/MessageUser.html", context)
 
+#Recommendation
+def get_similar_properties(target_property, n_neighbors=3):
+    all_properties = tbl_property.objects.exclude(id=target_property.id)
+
+    if not all_properties:
+        return []
+
+    data = pd.DataFrame(list(all_properties.values(
+        'id', 'rate', 'no_of_bedrooms', 'property_type', 'room_size'
+    )))
+
+    target_data = pd.DataFrame([{
+        'id': target_property.id,
+        'rate': target_property.rate,
+        'no_of_bedrooms': target_property.no_of_bedrooms,
+        'property_type': target_property.property_type,
+        'room_size': target_property.room_size
+    }])
+
+    combined_data = pd.concat([data, target_data], ignore_index=True)
+
+    numeric_features = ['rate', 'no_of_bedrooms', 'room_size']
+    categorical_features = ['property_type']
+
+    preprocessor = ColumnTransformer([
+        ('num', StandardScaler(), numeric_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+    ])
+
+    X = preprocessor.fit_transform(combined_data.drop('id', axis=1))
+
+    knn = NearestNeighbors(n_neighbors=n_neighbors + 1, metric='euclidean')
+    knn.fit(X)
+
+    distances, indices = knn.kneighbors([X[-1]])
+
+    similar_indices = indices[0][1:]
+    similar_ids = combined_data.iloc[similar_indices]['id'].tolist()
+
+    return tbl_property.objects.filter(id__in=similar_ids)
 
 def viewproperty(request):
     if not request.session.get('uid'):
@@ -224,21 +273,19 @@ def viewproperty(request):
 
 
 
-
-def viewdetails(request, property_id): 
+def viewdetails(request, property_id):
     if not request.session.get('uid'):
         return redirect('wguest:login')
+
     property = get_object_or_404(tbl_property, pk=property_id)
     user_id = request.session.get('uid')
     user = None
-    is_favorited = False  # Default to not favorited
+    is_favorited = False
 
     if user_id:
         user = get_object_or_404(tbl_newuser, pk=user_id)
-        # Check if the property is already favorited
         is_favorited = tbl_favourite.objects.filter(user=user, property=property).exists()
 
-        # Handle add/remove favorite via POST
         if request.method == 'POST' and 'favorite' in request.POST:
             if is_favorited:
                 tbl_favourite.objects.filter(user=user, property=property).delete()
@@ -246,16 +293,29 @@ def viewdetails(request, property_id):
                 tbl_favourite.objects.create(user=user, property=property)
             return redirect('wuser:viewdetails', property_id=property.id)
 
-    # Load gallery images
     gallery_images = tbl_gallery.objects.filter(property=property)
+
+    # Suggest properties where any two of the features match
+    similar_properties = tbl_property.objects.filter(
+        ~Q(id=property.id) & (
+            (Q(property_type=property.property_type) & Q(no_of_bedrooms=property.no_of_bedrooms)) |
+            (Q(property_type=property.property_type) & Q(room_size=property.room_size)) |
+            (Q(property_type=property.property_type) & Q(rate=property.rate)) |
+            (Q(no_of_bedrooms=property.no_of_bedrooms) & Q(room_size=property.room_size)) |
+            (Q(no_of_bedrooms=property.no_of_bedrooms) & Q(rate=property.rate)) |
+            (Q(room_size=property.room_size) & Q(rate=property.rate))
+        )
+    ).order_by('?')[:4].prefetch_related(
+        Prefetch('gallery_images', queryset=tbl_gallery.objects.order_by('id'), to_attr='images')
+    )
 
     return render(request, 'User/ViewDetailsProperty.html', {
         'property': property,
         'user': user,
         'gallery_images': gallery_images,
         'is_favorited': is_favorited,
+        'similar_properties': similar_properties,
     })
-
 
 def mymessages(request):
     if not request.session.get('uid'):
