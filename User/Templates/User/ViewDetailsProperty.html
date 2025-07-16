@@ -13,7 +13,39 @@
   <link rel="stylesheet" href="{% static 'UserTemplate/css/tiny-slider.css' %}" />
   <link rel="stylesheet" href="{% static 'UserTemplate/css/aos.css' %}" />
   <link rel="stylesheet" href="{% static 'UserTemplate/css/style.css' %}" />
-  
+  <style>
+    .property-img-wrapper img {
+    width: 100%;
+    height: 200px; /* Or auto for dynamic height */
+    object-fit: contain;  /* Ensures the full image is visible */
+    background-color: #f8f9fa;  /* Light background to fill empty spaces */
+}
+#similar-property-nav {
+    display: flex;
+    justify-content: space-between;  /* prev left, next right */
+    align-items: center;
+    margin-top: 5px;
+}
+
+#similar-property-nav .prev,
+#similar-property-nav .next {
+    background-color: #f0f0f0;  /* Light grey */
+    color: #000;                /* Black text */
+    padding: 8px 15px;
+    border: 2px solid #ccc;     /* Light grey border for ring effect */
+    border-radius: 50px;        /* Pill shape */
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#similar-property-nav .prev:hover,
+#similar-property-nav .next:hover {
+    background-color: #e0e0e0;  /* Slightly darker on hover */
+}
+
+
+  </style>
 </head>
 
 <body>
@@ -221,6 +253,64 @@
 
   </div>
 </div>
+</div>
+      <div class="section">
+  <div class="container">
+    <h3 class="mb-4">You May Also Like</h3>
+
+    {% if similar_properties %}
+    <div class="property-slider-wrap">
+      <div class="property-slider">
+
+        {% for prop in similar_properties %}
+        <div class="property-item">
+          <a href="{% url 'wuser:viewdetails' prop.id %}" class="img">
+            <div class="property-img-wrapper">
+              {% if prop.images and prop.images.0.image %}
+              <img src="{{ prop.images.0.image.url }}" alt="{{ prop.title }}">
+              {% else %}
+              <img src="{% static 'UserTemplate/images/no-image.jpg' %}" alt="No Image">
+              {% endif %}
+            </div>
+          </a>
+          <div style="margin-top: -20px;" class="property-content p-3">
+            <div class="mb-3">
+              <span class="fs-6">£{{ prop.rate }} / {{ prop.get_rent_type_display }}</span>
+            </div>
+            <div>
+              <span class="d-block mb-2 fw-bold fs-5 text-dark">{{ prop.title }}</span>
+              <span class="city d-block mb-3 fw-normal fs-6 text-muted">{{ prop.address }}, {{ prop.postcode }}</span>
+
+              <div class="specs d-flex mb-4">
+                <span class="d-block d-flex align-items-center me-3">
+                  <span class="icon-bed me-2"></span>
+                  <span class="caption text-secondary">{{ prop.no_of_bedrooms }} bedrooms</span>
+                </span>
+                <span class="d-block d-flex align-items-center me-3">
+                  <span class="icon-home2 me-2"></span>
+                  <span class="caption text-secondary">{{ prop.get_current_status_display }}</span>
+                </span>
+              </div>
+
+              <a href="{% url 'wuser:viewdetails' prop.id %}" class="btn btn-primary btn-sm py-2 px-3 rounded-pill shadow-sm">See details</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+<div id="similar-property-nav" class="controls" tabindex="0" aria-label="Carousel Navigation">
+    <span class="prev" data-controls="prev" aria-controls="property" tabindex="-1">Prev</span>
+    <span class="next" data-controls="next" aria-controls="property" tabindex="-1">Next</span>
+</div>
+
+
+    </div>
+    {% else %}
+    <p>No similar properties found.</p>
+    {% endif %}
+  </div>
+</div>
 
 <div class="site-footer">
     <div class="container">
@@ -270,7 +360,7 @@
         </div>
       </div>
 
-      </div>
+
       
     </div>
     <div class="row">
@@ -316,8 +406,57 @@
       });
     }
   });
+  function updateMainImage(src) {
+  const main = document.getElementById('mainPreview');
+  const modal = document.getElementById('modalImage');
+  if(main) main.src = src;
+  if(modal) modal.src = src;
+}
+document.addEventListener('DOMContentLoaded', function () {
+    var slider = tns({
+        container: '.property-slider',
+        items: 3,            // Show 3 items at a time
+        slideBy: 1,          // Move 1 item on next/prev
+        autoplay: false,
+        controls: false,
+        nav: false,
+        gutter: 20,
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 2
+            },
+            900: {
+                items: 3
+            }
+        }
+    });
+
+    document.querySelector('#similar-property-nav .prev').addEventListener('click', function () {
+        slider.goTo('prev');
+    });
+
+    document.querySelector('#similar-property-nav .next').addEventListener('click', function () {
+        slider.goTo('next');
+    });
+});
+
+
+
 </script>
 
+<!-- Modal for Image Preview -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <img id="modalImage" src="" class="img-fluid w-100" alt="Large Preview">
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 
