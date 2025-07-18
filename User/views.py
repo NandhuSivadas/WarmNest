@@ -146,7 +146,6 @@ def messageuser(request, property_id=None):
 #Recommendation
 def get_similar_properties(target_property, n_neighbors=3):
     all_properties = tbl_property.objects.exclude(id=target_property.id)
-
     if not all_properties:
         return []
 
@@ -164,8 +163,10 @@ def get_similar_properties(target_property, n_neighbors=3):
 
     combined_data = pd.concat([data, target_data], ignore_index=True)
 
-    numeric_features = ['rate', 'no_of_bedrooms', 'room_size']
-    categorical_features = ['property_type']
+    
+    numeric_features = ['rate', 'no_of_bedrooms']
+    categorical_features = ['property_type', 'room_size']
+
 
     preprocessor = ColumnTransformer([
         ('num', StandardScaler(), numeric_features),
@@ -174,11 +175,9 @@ def get_similar_properties(target_property, n_neighbors=3):
 
     X = preprocessor.fit_transform(combined_data.drop('id', axis=1))
 
-    knn = NearestNeighbors(n_neighbors=n_neighbors + 1, metric='euclidean')
+    knn = NearestNeighbors(n_neighbors=n_neighbors + 1)
     knn.fit(X)
-
     distances, indices = knn.kneighbors([X[-1]])
-
     similar_indices = indices[0][1:]
     similar_ids = combined_data.iloc[similar_indices]['id'].tolist()
 
@@ -279,33 +278,19 @@ def viewdetails(request, property_id):
 
     property = get_object_or_404(tbl_property, pk=property_id)
     user_id = request.session.get('uid')
-    user = None
-    is_favorited = False
+    user = get_object_or_404(tbl_newuser, pk=user_id) if user_id else None
+    is_favorited = tbl_favourite.objects.filter(user=user, property=property).exists() if user else False
 
-    if user_id:
-        user = get_object_or_404(tbl_newuser, pk=user_id)
-        is_favorited = tbl_favourite.objects.filter(user=user, property=property).exists()
-
-        if request.method == 'POST' and 'favorite' in request.POST:
-            if is_favorited:
-                tbl_favourite.objects.filter(user=user, property=property).delete()
-            else:
-                tbl_favourite.objects.create(user=user, property=property)
-            return redirect('wuser:viewdetails', property_id=property.id)
+    if request.method == 'POST' and 'favorite' in request.POST:
+        if is_favorited:
+            tbl_favourite.objects.filter(user=user, property=property).delete()
+        else:
+            tbl_favourite.objects.create(user=user, property=property)
+        return redirect('wuser:viewdetails', property_id=property.id)
 
     gallery_images = tbl_gallery.objects.filter(property=property)
 
-    # Suggest properties where any two of the features match
-    similar_properties = tbl_property.objects.filter(
-        ~Q(id=property.id) & (
-            (Q(property_type=property.property_type) & Q(no_of_bedrooms=property.no_of_bedrooms)) |
-            (Q(property_type=property.property_type) & Q(room_size=property.room_size)) |
-            (Q(property_type=property.property_type) & Q(rate=property.rate)) |
-            (Q(no_of_bedrooms=property.no_of_bedrooms) & Q(room_size=property.room_size)) |
-            (Q(no_of_bedrooms=property.no_of_bedrooms) & Q(rate=property.rate)) |
-            (Q(room_size=property.room_size) & Q(rate=property.rate))
-        )
-    ).order_by('?')[:4].prefetch_related(
+    similar_properties = get_similar_properties(property).prefetch_related(
         Prefetch('gallery_images', queryset=tbl_gallery.objects.order_by('id'), to_attr='images')
     )
 
@@ -316,6 +301,7 @@ def viewdetails(request, property_id):
         'is_favorited': is_favorited,
         'similar_properties': similar_properties,
     })
+
 
 def mymessages(request):
     if not request.session.get('uid'):
