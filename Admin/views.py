@@ -10,6 +10,12 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
+import os
+import joblib
+import pandas as pd
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 # Create your views here.
 from django.db.models import Count
@@ -132,6 +138,48 @@ def Add_Property(request):
 
     return render(request, 'Admin/AddProperty.html')
 
+
+@csrf_exempt
+def predict_rental_price(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            # Load trained model
+            model_path = os.path.join(settings.BASE_DIR, 'ml_model', 'rental_price_model.pkl')
+            model = joblib.load(model_path)
+
+            # Load reference dataset used during training to match features
+            ref_df = pd.read_csv(os.path.join(settings.BASE_DIR, 'ml_model', 'uk_room_rental_dataset.csv'))
+
+            # Drop target and unwanted column(s) before encoding
+            ref_df = ref_df.drop(columns=['rate', 'occupant_age'], errors='ignore')
+            ref_df = pd.get_dummies(ref_df)
+
+            # Convert input JSON to DataFrame
+            df = pd.DataFrame([data])
+
+            # Convert boolean-like fields to int
+            for bool_field in ['bills_included', 'short_term', 'is_en_suite']:
+                if bool_field in df.columns:
+                    df[bool_field] = df[bool_field].astype(int)
+
+            # One-hot encode input data
+            df = pd.get_dummies(df)
+
+            # Remove any 'occupant_age' dummies if present
+            df = df.loc[:, ~df.columns.str.startswith('occupant_age')]
+
+            # Align with training feature columns
+            df = df.reindex(columns=ref_df.columns, fill_value=0)
+
+            # Predict
+            prediction = model.predict(df)[0]
+
+            return JsonResponse({'predicted_price': round(prediction, 2)})
+
+        except Exception as e:
+            return JsonResponse({'error': f'Could not predict: {str(e)}'}, status=500)
 
 def view_more(request, property_id):
     if not request.session.get('aid'):
@@ -405,6 +453,9 @@ def replied_messages(request):
         'query': query,
         'property_query': property_query,
     })
+
+
+
 
 def admin_logout(request):
     request.session.flush()
