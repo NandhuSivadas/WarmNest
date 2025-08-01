@@ -7,6 +7,7 @@ urlpatterns = [
     path('homepage/',views.HomePage,name='homepage'),
     path('viewproperty/', views.view_property, name='viewproperty'),
     path('addproperty/',views.Add_Property,name='addproperty'),
+    path('predict-price/', views.predict_rental_price, name='predict_price'),
     path('viewmore/<int:property_id>/', views.view_more, name='viewmore'),
     path('userlist/',views.User_List,name='userlist'),
     path('pendingmessages/', views.pending_user_messages, name='pendingmessages'),

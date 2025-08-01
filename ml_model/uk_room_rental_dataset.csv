@@ -1,0 +1,101 @@
+postcode,rent_type,bills_included,short_term,property_type,room_size,room_furnishing,is_en_suite,no_of_rooms,share_occupation,room_for,share_gender,occupant_age,household_option,no_of_bedrooms,property_preference,property_habit,room_suitable_for,rate
+SW1,weekly,False,True,room_in_existing,single,furnished,True,5,student,male,male,22-39,lgbt,5,parking,smoking,family,538.61
+SE2,monthly,True,False,whole_property,double,furnished,True,4,student,female,male,26-48,veg,1,balcony,non_smoking,students,730.78
+NW1,monthly,True,False,whole_property,single,unfurnished,True,5,student,couple,mixed,31-45,lgbt,1,balcony,smoking,working professionals,1482.27
+W1,weekly,False,False,studio,double,furnished,False,3,professional,couple,female,22-45,lgbt,5,parking,smoking,students,854.71
+SE1,weekly,False,True,room_in_existing,single,unfurnished,False,3,professional,male,mixed,30-39,veg,4,parking,non_smoking,students,617.86
+W1,monthly,False,False,studio,single,furnished,False,1,professional,male,male,25-48,veg,5,balcony,non_smoking,working professionals,1015.07
+W2,monthly,True,True,whole_property,double,unfurnished,True,3,student,male,female,20-47,veg,5,balcony,smoking,family,658.13
+SE2,weekly,True,False,room_in_existing,single,unfurnished,False,1,professional,female,female,27-36,lgbt,5,balcony,smoking,family,883.19
+SW1,weekly,True,False,whole_property,single,unfurnished,False,2,professional,couple,female,32-46,veg,4,parking,non_smoking,students,597.49
+SW1,monthly,True,True,whole_property,single,furnished,True,1,professional,male,male,30-37,lgbt,3,parking,non_smoking,students,947.08
+N2,monthly,True,False,studio,single,furnished,True,4,student,female,female,34-49,lgbt,1,balcony,non_smoking,family,707.16
+SW1,weekly,True,True,whole_property,double,furnished,False,2,student,female,male,22-43,lgbt,1,parking,smoking,students,1411.64
+W1,weekly,False,False,studio,single,unfurnished,True,2,student,male,female,28-50,veg,3,garden,non_smoking,students,527.88
+W1,weekly,True,False,room_in_existing,single,unfurnished,True,1,professional,male,male,22-46,lgbt,4,balcony,smoking,family,1013.42
+N2,weekly,False,False,studio,single,unfurnished,True,3,student,male,mixed,29-43,veg,1,balcony,non_smoking,family,1498.15
+SW1,weekly,True,False,room_in_existing,double,furnished,True,3,student,male,female,29-45,lgbt,5,garden,smoking,students,617.36
+SW1,weekly,False,False,whole_property,single,unfurnished,True,3,student,female,male,22-46,veg,3,balcony,smoking,working professionals,1225.34
+SE1,weekly,False,False,whole_property,single,furnished,True,2,professional,female,mixed,24-42,lgbt,1,garden,non_smoking,students,1378.71
+W1,weekly,True,False,whole_property,double,furnished,True,2,professional,female,male,25-47,veg,4,parking,smoking,working professionals,491.04
+SW1,monthly,True,False,room_in_existing,single,unfurnished,False,3,professional,male,male,26-42,veg,3,balcony,non_smoking,working professionals,1069.78
+E2,monthly,True,True,studio,single,unfurnished,True,1,student,female,mixed,30-42,lgbt,4,parking,smoking,working professionals,353.26
+E2,weekly,True,False,studio,single,unfurnished,False,1,student,couple,female,33-41,veg,3,parking,smoking,students,804.54
+E2,weekly,False,False,whole_property,single,unfurnished,False,2,student,couple,mixed,30-43,veg,4,parking,smoking,family,867.82
+N1,weekly,False,False,room_in_existing,single,unfurnished,True,2,professional,male,male,27-43,lgbt,4,garden,smoking,family,1135.63
+W2,monthly,True,True,whole_property,single,furnished,False,2,professional,couple,mixed,34-36,lgbt,1,garden,smoking,working professionals,1101.09
+SE2,monthly,False,False,whole_property,double,furnished,False,4,student,male,mixed,28-48,veg,2,garden,non_smoking,students,1156.25
+W1,monthly,False,False,whole_property,single,furnished,True,2,student,couple,male,26-37,veg,4,garden,non_smoking,working professionals,374.72
+E2,monthly,True,False,studio,single,unfurnished,False,4,student,couple,mixed,27-43,lgbt,3,garden,non_smoking,students,766.63
+E2,weekly,False,True,whole_property,single,unfurnished,True,1,student,male,female,25-36,veg,4,garden,smoking,working professionals,692.21
+E2,monthly,False,False,room_in_existing,double,furnished,True,3,professional,couple,male,21-48,lgbt,2,balcony,smoking,family,482.86
+N1,monthly,True,True,studio,double,unfurnished,True,5,professional,male,female,23-45,lgbt,3,parking,non_smoking,working professionals,1429.76
+W1,weekly,True,True,whole_property,double,furnished,True,3,student,couple,female,22-44,veg,1,garden,non_smoking,students,820.23
+NW1,monthly,True,False,room_in_existing,double,unfurnished,False,4,student,female,male,22-40,veg,2,garden,non_smoking,working professionals,334.44
+NW1,weekly,False,True,studio,double,unfurnished,False,5,student,couple,male,26-37,lgbt,4,garden,smoking,family,871.31
+W2,monthly,True,True,studio,single,unfurnished,True,3,student,female,mixed,31-42,veg,3,parking,non_smoking,working professionals,667.95
+W1,weekly,True,False,room_in_existing,single,furnished,True,4,student,couple,mixed,29-37,lgbt,3,balcony,non_smoking,students,662.72
+SE2,weekly,False,True,room_in_existing,double,furnished,False,1,professional,couple,female,35-43,veg,3,balcony,smoking,working professionals,1429.28
+W2,weekly,True,False,studio,single,furnished,True,2,student,male,male,23-44,veg,5,parking,smoking,family,756.45
+W2,monthly,False,False,whole_property,single,furnished,True,2,student,couple,male,25-39,lgbt,5,balcony,smoking,students,790.22
+N2,monthly,False,True,room_in_existing,double,unfurnished,False,1,professional,female,mixed,26-42,lgbt,5,balcony,smoking,working professionals,1291.96
+SW1,weekly,True,False,whole_property,double,unfurnished,True,4,student,couple,female,28-44,veg,4,balcony,smoking,working professionals,1181.44
+N2,monthly,True,True,room_in_existing,single,unfurnished,True,2,student,couple,mixed,34-50,veg,2,parking,non_smoking,family,1277.09
+SW1,monthly,False,False,studio,double,furnished,True,3,student,couple,female,29-46,veg,5,balcony,non_smoking,students,677.42
+NW1,weekly,False,True,whole_property,double,unfurnished,True,2,student,couple,female,34-48,lgbt,2,garden,smoking,working professionals,825.74
+W2,weekly,True,True,whole_property,single,unfurnished,True,5,student,male,male,23-43,lgbt,2,garden,non_smoking,family,1146.49
+E2,monthly,False,True,studio,single,unfurnished,True,5,professional,male,female,33-41,veg,1,garden,non_smoking,family,995.91
+W2,weekly,False,False,studio,double,unfurnished,False,3,professional,couple,male,32-39,veg,1,garden,non_smoking,family,1396.12
+E2,monthly,True,False,room_in_existing,single,unfurnished,True,4,professional,couple,female,20-47,lgbt,4,parking,smoking,students,863.39
+SE1,monthly,False,True,studio,double,unfurnished,False,5,professional,couple,male,27-46,veg,2,parking,smoking,working professionals,1474.01
+SW1,monthly,True,False,room_in_existing,single,unfurnished,True,3,student,female,female,24-39,veg,5,parking,smoking,students,510.08
+N2,monthly,True,False,whole_property,single,furnished,False,3,student,female,mixed,20-50,veg,3,parking,smoking,students,830.08
+NW1,monthly,False,False,studio,double,furnished,False,4,professional,male,female,31-45,veg,3,balcony,non_smoking,working professionals,309.72
+E1,monthly,False,True,whole_property,double,furnished,True,5,student,couple,mixed,24-46,lgbt,1,garden,non_smoking,students,995.49
+N1,weekly,False,False,whole_property,double,furnished,True,2,student,couple,mixed,28-49,lgbt,3,garden,non_smoking,family,1344.48
+SW1,monthly,True,True,room_in_existing,double,unfurnished,True,4,professional,female,mixed,23-43,veg,3,parking,non_smoking,family,1428.35
+SW1,weekly,False,True,whole_property,double,furnished,True,4,student,couple,female,23-38,lgbt,1,garden,non_smoking,students,416.63
+SE2,weekly,False,False,studio,double,furnished,False,1,student,couple,female,28-36,veg,2,garden,non_smoking,students,1326.54
+SW1,monthly,False,True,studio,double,furnished,True,4,professional,couple,male,20-36,veg,2,balcony,smoking,students,1295.78
+SE2,weekly,True,True,studio,single,furnished,False,2,professional,couple,female,25-37,lgbt,2,balcony,non_smoking,students,1006.62
+E1,weekly,False,True,room_in_existing,double,furnished,True,4,student,female,mixed,23-43,lgbt,5,balcony,non_smoking,working professionals,1072.01
+E1,weekly,False,False,studio,single,unfurnished,False,1,professional,female,mixed,24-37,lgbt,3,parking,non_smoking,working professionals,1493.55
+SE2,monthly,False,False,room_in_existing,single,furnished,False,4,professional,female,female,34-42,veg,1,garden,non_smoking,working professionals,1098.13
+NW1,weekly,False,True,room_in_existing,single,furnished,False,1,student,male,mixed,21-45,veg,1,garden,non_smoking,family,1429.36
+E2,weekly,False,False,studio,single,furnished,True,4,professional,male,female,31-37,veg,5,balcony,non_smoking,family,1469.46
+N2,weekly,False,True,room_in_existing,double,unfurnished,False,3,professional,male,male,32-37,lgbt,1,balcony,smoking,working professionals,803.8
+NW1,weekly,False,False,whole_property,double,furnished,True,2,professional,couple,male,22-40,veg,4,garden,non_smoking,working professionals,627.8
+SE2,weekly,False,False,room_in_existing,double,unfurnished,False,1,professional,female,mixed,21-36,lgbt,3,balcony,smoking,working professionals,647.34
+SW1,weekly,False,False,room_in_existing,single,unfurnished,True,5,student,male,female,21-42,lgbt,4,balcony,non_smoking,family,815.14
+E2,monthly,False,True,studio,single,unfurnished,True,5,student,couple,female,22-42,lgbt,2,garden,non_smoking,family,394.38
+SE1,monthly,True,False,room_in_existing,single,furnished,True,3,student,couple,mixed,24-39,lgbt,2,garden,smoking,students,1022.88
+SW1,weekly,False,False,whole_property,double,unfurnished,False,2,student,male,female,34-46,veg,3,parking,smoking,working professionals,908.8
+SE1,monthly,False,True,room_in_existing,double,unfurnished,True,1,student,female,mixed,21-43,lgbt,3,parking,non_smoking,family,481.03
+E1,monthly,True,False,whole_property,single,furnished,True,2,student,female,mixed,25-41,veg,3,garden,non_smoking,working professionals,1114.68
+E1,monthly,True,False,room_in_existing,double,unfurnished,False,5,professional,female,male,24-50,veg,3,parking,non_smoking,students,1014.05
+SW1,monthly,False,False,room_in_existing,single,unfurnished,False,1,student,female,male,26-41,veg,2,balcony,smoking,students,392.6
+SW1,weekly,False,True,whole_property,double,furnished,True,2,professional,couple,female,21-42,veg,2,garden,non_smoking,family,1240.56
+W1,weekly,False,False,room_in_existing,double,unfurnished,False,3,student,couple,mixed,33-38,lgbt,5,balcony,non_smoking,students,1069.41
+NW1,weekly,True,False,room_in_existing,single,unfurnished,False,5,professional,female,male,27-49,veg,3,balcony,non_smoking,students,775.74
+NW1,weekly,False,True,studio,single,furnished,False,1,student,male,male,21-40,veg,2,parking,non_smoking,working professionals,1038.42
+SW1,weekly,False,True,room_in_existing,double,furnished,False,2,student,male,male,27-42,veg,1,balcony,non_smoking,family,943.26
+SE2,weekly,True,False,studio,single,unfurnished,True,5,student,male,mixed,22-44,veg,1,parking,smoking,working professionals,1348.0
+E1,monthly,False,False,whole_property,single,unfurnished,True,3,professional,couple,mixed,23-48,veg,2,balcony,non_smoking,family,706.26
+N1,monthly,False,True,room_in_existing,single,unfurnished,True,3,professional,male,male,21-41,veg,5,garden,non_smoking,working professionals,343.94
+W1,monthly,False,True,whole_property,double,unfurnished,True,3,student,female,mixed,34-50,veg,3,balcony,non_smoking,family,897.03
+SE2,monthly,True,False,room_in_existing,double,furnished,False,3,professional,male,female,29-40,veg,5,parking,non_smoking,students,1127.72
+NW1,monthly,True,False,whole_property,double,unfurnished,True,1,student,female,mixed,25-36,lgbt,5,parking,non_smoking,students,451.48
+W1,monthly,False,False,whole_property,single,furnished,False,3,student,female,male,24-44,veg,4,garden,non_smoking,students,1452.62
+E1,weekly,False,False,whole_property,single,unfurnished,False,4,professional,couple,female,35-39,lgbt,2,balcony,non_smoking,students,1378.41
+W2,weekly,False,False,whole_property,single,unfurnished,False,2,professional,female,mixed,27-37,lgbt,2,balcony,non_smoking,students,733.08
+N2,monthly,False,True,whole_property,single,furnished,False,4,student,couple,female,33-49,lgbt,2,garden,smoking,working professionals,859.0
+SE2,monthly,True,True,room_in_existing,double,furnished,True,5,professional,female,male,25-41,lgbt,3,parking,non_smoking,students,600.73
+SE2,monthly,True,False,whole_property,single,furnished,True,2,student,couple,male,20-37,lgbt,5,garden,smoking,family,799.9
+E1,monthly,False,False,studio,single,unfurnished,False,4,professional,couple,male,25-43,veg,4,garden,smoking,working professionals,1027.99
+NW1,monthly,False,False,room_in_existing,double,furnished,False,2,student,male,female,34-39,lgbt,1,balcony,non_smoking,working professionals,1337.0
+E2,weekly,True,False,whole_property,double,furnished,True,4,student,female,female,35-36,lgbt,4,parking,non_smoking,students,558.17
+NW1,weekly,True,False,studio,double,unfurnished,True,1,student,male,female,31-48,veg,3,balcony,non_smoking,students,984.34
+W1,monthly,False,True,studio,double,unfurnished,True,2,professional,female,female,30-44,veg,2,balcony,non_smoking,family,348.31
+E1,weekly,False,False,whole_property,double,furnished,True,3,student,male,female,29-45,veg,5,parking,non_smoking,family,975.51
+W2,weekly,False,False,whole_property,single,unfurnished,False,1,student,female,mixed,27-47,lgbt,5,garden,smoking,family,1054.83
+N2,monthly,True,True,room_in_existing,single,furnished,True,4,student,female,male,33-47,lgbt,4,parking,non_smoking,family,1172.88
