@@ -463,3 +463,9 @@ def viewcomplaint(request):
 def admin_logout(request):
     request.session.flush()
     return redirect('wguest:login')
+
+
+
+def feedback_list(request):
+    feedbacks = tbl_feedback.objects.select_related('user').order_by('-submitted_at')
+    return render(request,'Admin/ViewFeedback.html', {'feedback_list': feedbacks})

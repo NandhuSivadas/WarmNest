@@ -396,32 +396,28 @@ def complaint(request):
         tbl_complaint.objects.create(title=request.POST.get("txt_title"),
                                      description=request.POST.get("txt_description"),
                                      user=user)
-        return redirect('webuser:complaint')
+        return redirect('wuser:complaint')
     else:
         return render(request,'User/Complaint.html')
     
 
 
-def feedback_view(request):
-    user_id = request.session.get('userid')  # session must be set during login
+from django.utils import timezone
 
-    if not user_id:
-        messages.error(request, "You must be logged in to submit feedback.")
-        return redirect('login')  # replace with your actual login route
-
-    try:
-        user = tbl_newuser.objects.get(id=user_id)
-    except tbl_newuser.DoesNotExist:
-        messages.error(request, "User not found.")
-        return redirect('login')
-
+def submit_feedback(request):
     if request.method == 'POST':
-        msg = request.POST.get('message')
-        if msg:
-            tbl_feedback.objects.create(user=user, message=msg)
-            messages.success(request, "Feedback submitted successfully!")
-            return redirect('feedback')  # reload page after success
-        else:
-            messages.error(request, "Feedback message cannot be empty.")
+        message = request.POST.get('message')
+        user_id = request.session.get('uid')  # assuming user is logged in and stored in session
 
-    return render(request, 'feedback.html')
+        if user_id and message:
+            try:
+                user = tbl_newuser.objects.get(id=user_id)
+                tbl_feedback.objects.create(user=user, message=message, submitted_at=timezone.now())
+                return render(request, 'User/Feedback.html', {'success': True})
+            except tbl_newuser.DoesNotExist:
+                return render(request, 'User/Feedback.html', {'error': "User not found."})
+        else:
+            return render(request, 'User/Feedback.html', {'error': "Please login and enter a message."})
+
+    return render(request, 'User/Feedback.html')
+

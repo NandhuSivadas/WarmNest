@@ -1,5 +1,5 @@
-{% extends 'Admin/Header.html' %}
-{% load static %}
+{% extends 'Admin/NavBar.html' %}
+{% block title %} Complaints{% endblock %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
@@ -34,28 +34,8 @@
             {% endfor %}
         </table>
 
-        <h2 align="center">Replied Complaints</h2>
-        <table border="1" align="center">
-            <tr>
-                <td>Sl No</td>
-                <td>User Name</td>
-                <td>Title</td>
-                <td>Description</td>
-                <td>Date</td>
-                <td>Reply</td>
-            </tr>
-            {% for i in ReplyData%}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{i.user.user_name}}</td>
-                <td>{{i.title}}</td>
-                <td>{{i.description}}</td>
-                <td>{{i.date}}</td>
-                <td>{{i.reply}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+       
     </form>
 </body>
-</html>
+</html><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock content %}

@@ -19,7 +19,7 @@ urlpatterns = [
     path('blocked_users/',views.blocked_users,name='blocked_users'),
     path('admin_logout/',views.admin_logout,name='admin_logout'),
     path('ViewComplaint/',views.viewcomplaint,name='viewcomplaint'),
-    
+    path('feedback/', views.feedback_list, name='feedback_list'),
     
 
  
