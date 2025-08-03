@@ -48,6 +48,8 @@
             <li><a href="{% url 'wuser:viewproperty' %}">Search</a></li>
             <li><a href="{% url 'wuser:mymessages' %}">Messages</a></li>
             <li class="active"><a href="{%  url 'wuser:myprofile' %}">My Profile</a></li>
+            <li><a href="{%  url 'wuser:complaint' %}">Complaint</a></li>
+            <li><a href="{%  url 'wuser:feedback' %}">feedback</a></li>
             <li><a href="{% url 'wuser:favourite_list' %}"><span class="icon-heart"></span></a></li>
             <li><a href="{% url 'wuser:logout_confirm' %}?next={{ request.get_full_path }}">
             <span class="icon-sign-out"></span></a></li>
