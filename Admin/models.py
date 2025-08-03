@@ -228,3 +228,4 @@ class tbl_favourite(models.Model):
 
     def __str__(self):
         return f"{self.user.name} - {self.property.title}"
+

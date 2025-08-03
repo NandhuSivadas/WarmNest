@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback</title>
+</head>
+<body>
+    <h2>Submit Feedback</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label>Your Feedback:</label><br>
+        <textarea name="message" rows="5" cols="50" placeholder="Enter your feedback here..." required></textarea><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

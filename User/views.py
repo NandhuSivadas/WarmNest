@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import check_password, make_password
 from User.models import*
-
+from django.contrib import messages
 
 
 #Machine learning model required libraries
@@ -390,3 +390,38 @@ def user_review(request,property_id):
 
 
 
+def complaint(request):
+    user=tbl_newuser.objects.get(id=request.session['uid'])
+    if request.method=="POST":
+        tbl_complaint.objects.create(title=request.POST.get("txt_title"),
+                                     description=request.POST.get("txt_description"),
+                                     user=user)
+        return redirect('webuser:complaint')
+    else:
+        return render(request,'User/Complaint.html')
+    
+
+
+def feedback_view(request):
+    user_id = request.session.get('userid')  # session must be set during login
+
+    if not user_id:
+        messages.error(request, "You must be logged in to submit feedback.")
+        return redirect('login')  # replace with your actual login route
+
+    try:
+        user = tbl_newuser.objects.get(id=user_id)
+    except tbl_newuser.DoesNotExist:
+        messages.error(request, "User not found.")
+        return redirect('login')
+
+    if request.method == 'POST':
+        msg = request.POST.get('message')
+        if msg:
+            tbl_feedback.objects.create(user=user, message=msg)
+            messages.success(request, "Feedback submitted successfully!")
+            return redirect('feedback')  # reload page after success
+        else:
+            messages.error(request, "Feedback message cannot be empty.")
+
+    return render(request, 'feedback.html')
