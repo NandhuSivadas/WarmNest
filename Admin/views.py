@@ -16,7 +16,7 @@ import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
-
+from User.models import *
 # Create your views here.
 from django.db.models import Count
 
@@ -454,7 +454,10 @@ def replied_messages(request):
         'property_query': property_query,
     })
 
-
+def viewcomplaint(request):
+    replydata=tbl_complaint.objects.filter(status=1)
+    complaintdata=tbl_complaint.objects.filter(status=0)
+    return render(request,'Admin/ViewComplaint.html',{'Data':complaintdata,'ReplyData':replydata})
 
 
 def admin_logout(request):

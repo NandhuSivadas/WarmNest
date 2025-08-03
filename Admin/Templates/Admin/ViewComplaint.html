@@ -1,0 +1,61 @@
+{% extends 'Admin/Header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h2 align="center">New Complaints</h2>
+        <table border="1" cellpadding="10" align="center">
+            <tr>
+                <td>Sl No</td>
+                <td>User Name</td>
+                <td>Title</td>
+                <td>Description</td>
+                <td>Date</td>
+                <td>Action</td>
+               
+            </tr>
+            {% for i in Data%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.user.user_name}}</td>
+                <td>{{i.title}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.date}}</td>
+                <td><a href="{%url 'webadmin:reply' i.id %}">Reply</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2 align="center">Replied Complaints</h2>
+        <table border="1" align="center">
+            <tr>
+                <td>Sl No</td>
+                <td>User Name</td>
+                <td>Title</td>
+                <td>Description</td>
+                <td>Date</td>
+                <td>Reply</td>
+            </tr>
+            {% for i in ReplyData%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.user.user_name}}</td>
+                <td>{{i.title}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.date}}</td>
+                <td>{{i.reply}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+{% endblock content %}
