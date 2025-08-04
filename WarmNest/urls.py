@@ -24,6 +24,7 @@ urlpatterns = [
     path('wadmin/',include('Admin.urls')),
     path('guest/',include('Guest.urls')),
     path('user/',include('User.urls')),
+    path('user/',include('ML.urls')),
 ]
 
 

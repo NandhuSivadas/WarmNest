@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Admin',
     'User',
     'channels',
+    'ML'
 ]
 
 MIDDLEWARE = [
